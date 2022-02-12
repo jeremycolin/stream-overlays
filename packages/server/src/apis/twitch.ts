@@ -5,7 +5,7 @@ const TWITCH_API_TOKEN = process.env.TWITCH_API_TOKEN!;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID!;
 const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET!;
 
-const TWITCH_API_BASE_PATH = "https://api.twitch.tv/helix/";
+const TWITCH_API_BASE_PATH = "https://streamoverlays.herokuapp.com/eventsub";
 const SUBSCRIPTION_CALLBACK = "https://b64b-92-206-253-107.ngrok.io";
 
 const axios = axiosModule.create({
