@@ -17,9 +17,8 @@ const axios = axiosModule.create({
 });
 
 function logError(err: any) {
-  console.log(err.response.data);
   console.log(err.response.status);
-  console.log(err.response.headers);
+  console.log(err.response);
 }
 
 export async function getBroadcasterIdFromUser(user: string): Promise<string | null> {
