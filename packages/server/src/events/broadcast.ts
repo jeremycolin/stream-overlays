@@ -6,7 +6,7 @@ import {
   isTwitchSubEvent,
   TwitchEvent,
   TwitchNotificationSubscription,
-} from "./events/twitch";
+} from "./twitch";
 
 type Subscription = (event: SubscriptionEvent) => void;
 const broadcasterMap = new Map<string, Set<Subscription>>();

@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { NextFunction, Request, Response } from "express";
-import { broadcastEvent } from "../broadcast";
+import { broadcastEvent } from "../events/broadcast";
 import { TwitchNotification } from "../events/twitch";
 
 // Notification request headers
@@ -64,7 +64,7 @@ export function twitchEventSubMessageTypeMiddleWare(req: Request, res: Response,
     console.warn(`condition: ${JSON.stringify(notification.subscription.condition, null, 4)}`);
   } else if (MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
     notification.event.broadcaster_user_id = "151809327"; // as we use twitch CLI for now, force a given user (samyz_)
-    console.log("handling notification: ", notification);
+    console.debug("handling notification: ", notification);
     broadcastEvent(notification);
     res.sendStatus(204);
   } else {

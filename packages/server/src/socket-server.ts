@@ -1,7 +1,7 @@
 import { EventTypesEnum } from "api";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { addBroadcasterSubscription, clearBroadCasterSubscriptions } from "./broadcast";
+import { addBroadcasterSubscription, clearBroadCasterSubscriptions } from "./events/broadcast";
 import { deleteSubscription, getBroadcasterIdFromUser, getOrSubscribeToType } from "./apis/twitch";
 import { config, isDev } from "./config";
 

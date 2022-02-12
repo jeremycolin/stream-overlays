@@ -13,3 +13,5 @@ ngrok
 # os generated files
 .DS_Store
 .DS_Store?
+
+packages/server/dist

@@ -4,17 +4,21 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "build": "tsc"
   },
   "dependencies": {
     "api": "0.1.0-local",
     "axios": "^0.25.0",
+    "compression": "^1.7.4",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
+    "helmet": "^5.0.2",
     "socket.io": "^4.4.1",
     "ts-node": "^10.5.0"
   },
   "devDependencies": {
+    "@types/compression": "^1.7.2",
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.16",
     "@types/socket.io": "^3.0.2"
