@@ -7,4 +7,9 @@ export default defineConfig({
   server: {
     port: 5000,
   },
+  define: {
+    __WEBSOCKET_ENDPOINT__: JSON.stringify(
+      process.env.NODE_ENV === "production" ? "wss://streamoverlays.herokuapp.com/" : "ws://localhost:3000/"
+    ),
+  },
 });

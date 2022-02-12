@@ -17,7 +17,7 @@ export default {
   },
   async mounted() {
     await useRouter().isReady();
-    const socket = io("ws://localhost:3000/", {
+    const socket = io(__WEBSOCKET_ENDPOINT__, {
       query: { user: this.$route.params.user },
     });
 
