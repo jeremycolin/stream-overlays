@@ -1,8 +1,8 @@
 import { EventTypesEnum } from "api";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { addBroadcasterSubscription, clearBroadCasterSubscriptions } from "./broadcast-events";
-import { deleteSubscription, getBroadcasterIdFromUser, getOrSubscribeToType } from "./twitch-api";
+import { addBroadcasterSubscription, clearBroadCasterSubscriptions } from "./broadcast";
+import { deleteSubscription, getBroadcasterIdFromUser, getOrSubscribeToType } from "./apis/twitch";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
@@ -32,8 +32,6 @@ io.on("connection", async (socket) => {
       // getOrSubscribeToType(brodcasterUserId, EventTypesEnum.RAID), // works but useless for now
     ])
   ).flat();
-
-  console.log("subscriptions: ", JSON.stringify(subscriptions, null, 2));
 
   addBroadcasterSubscription(brodcasterUserId, (event) => socket.emit(event.type, event));
 

@@ -6,7 +6,7 @@ import {
   isTwitchSubEvent,
   TwitchEvent,
   TwitchNotificationSubscription,
-} from "./twitch-events";
+} from "./events/twitch";
 
 type Subscription = (event: SubscriptionEvent) => void;
 const broadcasterMap = new Map<string, Set<Subscription>>();
@@ -64,6 +64,9 @@ export function broadcastEvent({ event, subscription }: { event: TwitchEvent; su
       from_user_name: event.from_broadcaster_user_name,
       viewers: event.viewers,
     };
+  } else {
+    console.warn("unknown event: ", subscription.type);
+    return;
   }
 
   subscriptions.forEach((sub) => sub(broadcastEvent));
