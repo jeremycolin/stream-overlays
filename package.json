@@ -1,0 +1,15 @@
+{
+  "name": "stream-overlays",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/api",
+    "packages/client",
+    "packages/server"
+  ],
+  "dependencies": {
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.5"
+  }
+}

@@ -1,0 +1,15 @@
+node_modules
+
+# debug files
+.apis
+
+# server dotenv config
+.env
+
+# clis
+twitch
+ngrok
+
+# os generated files
+.DS_Store
+.DS_Store?
