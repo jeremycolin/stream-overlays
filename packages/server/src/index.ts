@@ -32,7 +32,7 @@ app.use(
 );
 
 app.get("/hello", (req, res) => {
-  res.status(200).send("Hello World");
+  res.status(200).send("Hello World, yay Heroku!");
 });
 app.post("/eventsub", [twitchEventSubValidationMiddleWare, twitchEventSubMessageTypeMiddleWare]);
 
