@@ -8,6 +8,10 @@
     "packages/client",
     "packages/server"
   ],
+  "scripts": {
+    "build": "yarn workspaces run build",
+    "start": "node packages/server/dist/index.js"
+  },
   "dependencies": {
     "prettier": "^2.5.1",
     "typescript": "^4.5.5"

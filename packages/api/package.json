@@ -1,5 +1,10 @@
 {
   "name": "api",
   "version": "0.1.0-local",
-  "main": "index.ts"
+  "license": "MIT",
+  "main": "src/index.ts",
+  "browser": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  }
 }
