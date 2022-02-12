@@ -8,15 +8,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vitejs/plugin-vue": "^2.2.0",
     "api": "0.1.0-local",
     "gsap": "^3.9.1",
     "pixi-filters": "^4.1.6",
     "pixi.js": "^6.2.2",
-    "sass": "^1.49.7",
     "socket.io-client": "^4.4.1",
-    "vite": "^2.8.0",
     "vue": "^3.2.25",
     "vue-router": "4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^2.2.0",
+    "sass": "^1.49.7",
+    "vite": "^2.8.0"
   }
 }
