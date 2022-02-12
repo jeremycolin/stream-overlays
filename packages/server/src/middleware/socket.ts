@@ -1,25 +1,9 @@
 import { EventTypesEnum } from "api";
-import { createServer } from "http";
-import { Server } from "socket.io";
-import { addBroadcasterSubscription, clearBroadCasterSubscriptions } from "./events/broadcast";
-import { deleteSubscription, getBroadcasterIdFromUser, getOrSubscribeToType } from "./apis/twitch";
-import { config, isDev } from "./config";
+import { Socket } from "socket.io";
+import { addBroadcasterSubscription, clearBroadCasterSubscriptions } from "../events/broadcast";
+import { deleteSubscription, getBroadcasterIdFromUser, getOrSubscribeToType } from "../apis/twitch";
 
-const httpServer = createServer();
-const io = new Server(
-  httpServer,
-  isDev
-    ? {
-        cors: {
-          origin: "http://localhost:5000",
-        },
-      }
-    : {}
-);
-
-httpServer.listen(config.SOCKET_SERVER_PORT);
-
-io.on("connection", async (socket) => {
+export async function socketMiddleWare(socket: Socket) {
   const user = socket.handshake.query.user as string;
   console.log(`${user} connected`);
 
@@ -47,4 +31,4 @@ io.on("connection", async (socket) => {
     subscriptions.forEach((sub) => deleteSubscription(sub.id));
     console.log(`${user} disconnected`);
   });
-});
+}

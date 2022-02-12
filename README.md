@@ -11,5 +11,5 @@ yarn start
 ```
 
 ```
-./twitch event trigger follow -F http://localhost:8080/eventsub -s YOUR_DARKEST_SECRET
+./twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET
 ```
