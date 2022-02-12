@@ -22,5 +22,8 @@
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.16",
     "@types/socket.io": "^3.0.2"
+  },
+  "engines": {
+    "node": "16.11.1"
   }
 }
