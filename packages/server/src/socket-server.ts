@@ -3,15 +3,21 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { addBroadcasterSubscription, clearBroadCasterSubscriptions } from "./broadcast";
 import { deleteSubscription, getBroadcasterIdFromUser, getOrSubscribeToType } from "./apis/twitch";
+import { config, isDev } from "./config";
 
 const httpServer = createServer();
-const io = new Server(httpServer, {
-  cors: {
-    origin: "http://localhost:5000",
-  },
-});
+const io = new Server(
+  httpServer,
+  isDev
+    ? {
+        cors: {
+          origin: "http://localhost:5000",
+        },
+      }
+    : {}
+);
 
-httpServer.listen(3000);
+httpServer.listen(config.SOCKET_SERVER_PORT);
 
 io.on("connection", async (socket) => {
   const user = socket.handshake.query.user as string;

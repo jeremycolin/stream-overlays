@@ -1,9 +1,10 @@
 import express from "express";
 import "dotenv/config";
+import { config } from "./config";
+import "./health";
 import "./socket-server";
 import { twitchEventSubMessageTypeMiddleWare, twitchEventSubValidationMiddleWare } from "./middleware/twitch-eventsub";
 const app = express();
-const PORT = 8080;
 
 app.use(
   express.raw({
@@ -14,6 +15,6 @@ app.use(
 
 app.use([twitchEventSubValidationMiddleWare, twitchEventSubMessageTypeMiddleWare]);
 
-app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`);
+app.listen(config.SERVER_PORT, () => {
+  console.log(`server listening at http://localhost:${config.SERVER_PORT}`);
 });

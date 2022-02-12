@@ -57,7 +57,6 @@ export function twitchEventSubMessageTypeMiddleWare(req: Request, res: Response,
 
   if (MESSAGE_TYPE_VERIFICATION === req.headers[MESSAGE_TYPE]) {
     res.status(200).send(notification.challenge);
-    next();
   } else if (MESSAGE_TYPE_REVOCATION === req.headers[MESSAGE_TYPE]) {
     res.sendStatus(204);
     console.warn(`${notification.subscription.type} notifications revoked!`);
