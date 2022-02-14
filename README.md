@@ -32,7 +32,7 @@ cd packages/client && yarn start
 
 Examples:
 
-For `samyz_`: `http://localhost:5000/samyz*/overlay`
+For `samyz_`: `http://localhost:5000/samyz_/overlay`
 
 ```
 ./twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --to-user 151809327

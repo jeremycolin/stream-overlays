@@ -13,6 +13,7 @@ export async function socketMiddleWare(socket: Socket) {
     socket.disconnect();
     return;
   }
+  console.log("brodcasterUserId: ", brodcasterUserId);
 
   const subscriptions = (
     await Promise.all([
@@ -23,9 +24,8 @@ export async function socketMiddleWare(socket: Socket) {
     ])
   ).flat();
 
-  console.log("brodcasterUserId: ", brodcasterUserId);
   addBroadcasterSubscription(brodcasterUserId, (event) => {
-    console.log("EMITTING: ,", event);
+    console.debug("Emitting event: ", event);
     socket.emit(event.type, event);
   });
 
