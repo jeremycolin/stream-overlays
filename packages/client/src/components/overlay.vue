@@ -1,19 +1,23 @@
 <script>
 import * as PIXI from 'pixi.js';
-import { gsap } from "gsap";
+import { gsap, Elastic } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
-import { GlitchFilter } from 'pixi-filters';
+import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 
+PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);
 
 const app = new PIXI.Application({
-  width: 1920,
-  height: 1080,
+  width: 500,
+  height: 281,
   backgroundAlpha: 0
 })
 
 const stage = new PIXI.Container();
+let graphics
 let followText
+
+var audio = new Audio('/src/assets/follow.wav');
 
 export default {
   name: 'overlay',
@@ -25,59 +29,125 @@ export default {
   inject: ['followEvent'],
   watch: {
     followEvent() {
-      this.drawFollowEvent()
+      this.drawFollowEvent();
     }
   },
   methods: {
-    drawFollowEvent () {
-      followText.text = `${this.followEvent.type} : ${this.followEvent.user_name}`;
-
-      followText.x = 25;
-      followText.y = -25;
-
-      gsap.to(followText, 0.5, {
-        y: 30, // appearing from the top
-        repeat: 1, // we repeat only once 
-        repeatDelay: 7, // how long it stays on the screen
-        yoyo: true, // yoyo = repeat the animation but reverse
+    drawFollowEvent() {
+      gsap.set(graphics, {
+        width: 1
       });
 
-      stage.addChild(followText);
-    }
+      this.$refs.video.play()
+      gsap.to(this.$refs.notification, 1.5, {
+        y: 25, // appearing from the top
+        repeat: 1, // we repeat only once 
+        repeatDelay: 4, // how long it stays on the screen
+        yoyo: true, // yoyo = repeat the animation but reverse
+        ease: Elastic.easeOut.config(1, 0.3)
+      });
+
+      gsap.to(graphics, 1.9, {
+        width: 500,
+        delay: 1.95
+      });
+
+      audio.play();
+    },
   },
   mounted () {
-    this.$el.appendChild(app.view);
-    app.stage.addChild(stage);
-    let renderer = PIXI.autoDetectRenderer();
+    this.$refs.video.pause()
+    gsap.set(this.$refs.notification, { y: -525 });
 
-    let ticker = PIXI.Ticker.shared;
-    ticker.add((time) => {
-      renderer.render(stage);
-      filterGlitch.seed = Math.random();
-      filterGlitch.offset = Math.random() * (Math.random() + 2);
+    // Load directly from google CSS!
+    app.loader.add({ name: 'From Google 1', url: 'https://fonts.googleapis.com/css2?family=Roboto' });
+    app.loader.load(() => {
+      followText = new PIXI.Text('Bienvenue Jean Michel!', {
+        fontFamily: 'Roboto',
+        fontSize: 34,
+        fontWeight: 'bold',
+        fill : 0xffffff
+      });
+
+      followText.anchor.set(0.5);
+      followText.x = 500 / 2;
+      followText.y = 281 / 2;
+
+      stage.addChild(followText);
+
+      this.$refs.canvas.appendChild(app.view);
+      app.stage.addChild(stage);
+
+
+
+      graphics = new PIXI.Graphics();
+
+      // Rectangle
+      graphics.beginFill(0xDE3249);
+      graphics.drawRect(0, 100, 1, 100);
+      graphics.endFill();
+
+      followText.mask = graphics;
+
+      stage.addChild(graphics);
     });
-
-    followText = new PIXI.Text('user_name', {
-      fontFamily : 'Arial',
-      fontSize: 24,
-      fill : 0xffffff
-    });
-
-    const filterGlitch = new GlitchFilter()
-    followText.filters = [filterGlitch];
   }
 }
 </script>
 
 <template>
-<div class="overlay">
-</div>
+  <div class="overlay">
+    <div class="overlay__notification" ref="notification">
+      <div class="overlay__container">
+        <div class="overlay__canvas" ref="canvas"></div>
+        <video autoplay muted src="/src/assets/filou.mp4" ref="video"></video>
+      </div>
+    </div>
+    <button @click="drawFollowEvent()"> trigger event</button>
+  </div>
 </template>
 
 <style lang="scss">
 .overlay {
   width: 1920px;
   height: 1080px;
-  border: 1px solid black;
+
+  &__notification {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    width: 500px;
+    height: 281px;
+    border-radius: 10px;
+    overflow:hidden;
+
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 5;
+      transform: scaleX(-1);
+    }
+  }
+
+  &__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+
+  }
+  button {
+    position: absolute;
+    bottom: 0;
+    left: 25px;
+  }
 }
 </style>

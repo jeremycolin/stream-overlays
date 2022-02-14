@@ -11,6 +11,7 @@
     "api": "0.1.0-local",
     "gsap": "^3.9.1",
     "pixi-filters": "^4.1.6",
+    "pixi-webfont-loader": "^1.0.2",
     "pixi.js": "^6.2.2",
     "socket.io-client": "^4.4.1",
     "vue": "^3.2.25",
