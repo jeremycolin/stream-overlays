@@ -4,6 +4,7 @@ import { gsap, Elastic } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
 import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 import { DropShadowFilter } from "pixi-filters";
+import followSound from "../assets/follow.wav";
 
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);
@@ -19,7 +20,7 @@ let graphics;
 let followText;
 
 // TODO: preload sound + video
-const audio = new Audio("/src/assets/follow.wav");
+const audio = new Audio(followSound);
 
 export default {
   name: "overlay",
