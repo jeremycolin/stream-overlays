@@ -35,7 +35,7 @@ export async function getBroadcasterIdFromUser(user: string): Promise<string | n
   }
 }
 
-interface TwitchSubscription {
+export interface TwitchSubscription {
   id: string;
   status: "webhook_callback_verification_pending" | "webhook_callback_verification_failed";
   type: EventTypesEnum;
@@ -67,14 +67,15 @@ export async function getSubscriptionsByType(broadcasterUserId: string, type: Ev
   }
 }
 
-export async function subscribeToType(brodcasterUserId: string, type: EventTypesEnum): Promise<Array<TwitchSubscription>> {
+export async function subscribeToType(broadcasterUserId: string, type: EventTypesEnum): Promise<Array<TwitchSubscription>> {
   try {
     const { data } = (await axios.post(
       "/eventsub/subscriptions",
       {
         type,
         version: "1",
-        condition: type === EventTypesEnum.RAID ? { to_broadcaster_user_id: brodcasterUserId } : { broadcaster_user_id: brodcasterUserId },
+        condition:
+          type === EventTypesEnum.RAID ? { to_broadcaster_user_id: broadcasterUserId } : { broadcaster_user_id: broadcasterUserId },
         transport: { method: "webhook", callback: SUBSCRIPTION_CALLBACK, secret: TWITCH_CLIENT_SECRET },
       },
       {
@@ -98,10 +99,10 @@ export async function deleteSubscription(id: string): Promise<void> {
   }
 }
 
-export async function getOrSubscribeToType(brodcasterUserId: string, type: EventTypesEnum): Promise<Array<TwitchSubscription>> {
-  let subscriptions = await getSubscriptionsByType(brodcasterUserId, type);
+export async function getOrSubscribeToType(broadcasterUserId: string, type: EventTypesEnum): Promise<Array<TwitchSubscription>> {
+  let subscriptions = await getSubscriptionsByType(broadcasterUserId, type);
   if (!subscriptions.length) {
-    subscriptions = await subscribeToType(brodcasterUserId, type);
+    subscriptions = await subscribeToType(broadcasterUserId, type);
   }
   return subscriptions;
 }

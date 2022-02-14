@@ -1,4 +1,5 @@
 import { EventTypesEnum, SubscriptionEvent } from "api";
+import { TwitchSubscription } from "../apis/twitch";
 import {
   isTwitchFollowEvent,
   isTwitchGiftEvent,
@@ -9,28 +10,30 @@ import {
 } from "./twitch";
 
 type Subscription = (event: SubscriptionEvent) => void;
-const broadcasterMap = new Map<string, Set<Subscription>>();
+const broadcasterMap = new Map<string, { twitchSubscriptions: TwitchSubscription[]; subscription: Subscription }>();
+
+export function setBroadcasterSubscriptions(
+  broadcasterUserId: string,
+  twitchSubscriptions: TwitchSubscription[],
+  subscription: Subscription
+) {
+  broadcasterMap.set(broadcasterUserId, { twitchSubscriptions, subscription });
+}
 
 export function getBroadcasterSubscriptions(broadcasterUserId: string) {
-  let broadcastSubscriptions = broadcasterMap.get(broadcasterUserId);
-  if (!broadcastSubscriptions) {
-    broadcastSubscriptions = new Set();
-    broadcasterMap.set(broadcasterUserId, broadcastSubscriptions);
-  }
-  return broadcastSubscriptions;
+  return broadcasterMap.get(broadcasterUserId);
 }
 
-export function addBroadcasterSubscription(broadcasterUserId: string, subscription: Subscription) {
-  const broadcastSubscriptions = getBroadcasterSubscriptions(broadcasterUserId);
-  broadcasterMap.set(broadcasterUserId, broadcastSubscriptions.add(subscription));
-}
-
-export function clearBroadCasterSubscriptions(broadcasterUserId: string) {
+export function cleanBroadCasterSubscriptions(broadcasterUserId: string) {
   broadcasterMap.delete(broadcasterUserId);
 }
 
 export function broadcastEvent({ event, subscription }: { event: TwitchEvent; subscription: TwitchNotificationSubscription }) {
-  const subscriptions = getBroadcasterSubscriptions(event.broadcaster_user_id);
+  const subscriptions = broadcasterMap.get(event.broadcaster_user_id);
+  if (!subscriptions) {
+    console.warn("Broadcaster", event.broadcaster_user_id, "has no active broadcast subscriptions");
+    return;
+  }
 
   let broadcastEvent: SubscriptionEvent;
   if (isTwitchFollowEvent(event, subscription.type)) {
@@ -69,5 +72,5 @@ export function broadcastEvent({ event, subscription }: { event: TwitchEvent; su
     return;
   }
 
-  subscriptions.forEach((sub) => sub(broadcastEvent));
+  subscriptions.subscription(broadcastEvent);
 }

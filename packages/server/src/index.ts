@@ -60,7 +60,7 @@ const io = new Server(
     : {}
 );
 
-io.on("connection", socketMiddleWare);
+io.on("connection", socketMiddleWare(io));
 
 server.listen(config.SERVER_PORT, () => {
   console.log(`server listening at http://localhost:${config.SERVER_PORT}`);
