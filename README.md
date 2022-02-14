@@ -1,5 +1,9 @@
 ### Setup
 
+```
+yarn install
+```
+
 #### Environment variables
 
 Create a file `packages/server/.env` file containing the values for the following environment variables:
