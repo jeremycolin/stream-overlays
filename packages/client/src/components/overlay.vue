@@ -17,6 +17,7 @@ const stage = new PIXI.Container();
 let graphics
 let followText
 
+// TODO: preload sound + video
 var audio = new Audio('/src/assets/follow.wav');
 
 export default {
@@ -34,6 +35,7 @@ export default {
   },
   methods: {
     drawFollowEvent() {
+      // TODO: update the text from the event
       gsap.set(graphics, {
         width: 1
       });
@@ -47,6 +49,7 @@ export default {
         ease: Elastic.easeOut.config(1, 0.3)
       });
 
+      // Animate mask to reveal the text
       gsap.to(graphics, 1.9, {
         width: 500,
         delay: 1.95
@@ -62,6 +65,7 @@ export default {
     // Load directly from google CSS!
     app.loader.add({ name: 'From Google 1', url: 'https://fonts.googleapis.com/css2?family=Roboto' });
     app.loader.load(() => {
+
       followText = new PIXI.Text('Bienvenue Jean Michel!', {
         fontFamily: 'Roboto',
         fontSize: 34,
@@ -78,11 +82,9 @@ export default {
       this.$refs.canvas.appendChild(app.view);
       app.stage.addChild(stage);
 
-
-
       graphics = new PIXI.Graphics();
 
-      // Rectangle
+      // MASK
       graphics.beginFill(0xDE3249);
       graphics.drawRect(0, 100, 1, 100);
       graphics.endFill();
@@ -103,7 +105,6 @@ export default {
         <video autoplay muted src="/src/assets/filou.mp4" ref="video"></video>
       </div>
     </div>
-    <button @click="drawFollowEvent()"> trigger event</button>
   </div>
 </template>
 
@@ -143,11 +144,6 @@ export default {
     left: 0;
     z-index: 10;
 
-  }
-  button {
-    position: absolute;
-    bottom: 0;
-    left: 25px;
   }
 }
 </style>
