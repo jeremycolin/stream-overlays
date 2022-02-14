@@ -30,16 +30,30 @@ Start client:
 cd packages/client && yarn start
 ```
 
-Go to [http://localhost:5000/samyz\_/overlay](http://localhost:5000/samyz_/overlay)
+Examples:
+
+For `samyz_`: `http://localhost:5000/samyz*/overlay`
 
 ```
-./twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET
+./twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --to-user 151809327
+```
+
+For `askowbol`: `http://localhost:5000/askowbol/overlay`
+
+```
+./twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --to-user 44105925
 ```
 
 ### Test on live
 
-Go to [https://streamoverlays.herokuapp.com/samyz\_/overlay](https://streamoverlays.herokuapp.com/samyz_/overlay)
+For `samyz_`: `https://streamoverlays.herokuapp.com/samyz_/overlay`
 
 ```
-./twitch event trigger follow -F https://streamoverlays.herokuapp.com/eventsub -s YOUR_DARKEST_SECRET
+./twitch event trigger follow -F https://streamoverlays.herokuapp.com/eventsub -s YOUR_DARKEST_SECRET --to-user 151809327
+```
+
+For `askowbol`: `https://streamoverlays.herokuapp.com/askowbol/overlay`
+
+```
+./twitch event trigger follow -F https://streamoverlays.herokuapp.com/eventsub -s YOUR_DARKEST_SECRET --to-user 44105925
 ```

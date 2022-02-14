@@ -63,7 +63,6 @@ export function twitchEventSubMessageTypeMiddleWare(req: Request, res: Response,
     console.warn(`reason: ${notification.subscription.status}`);
     console.warn(`condition: ${JSON.stringify(notification.subscription.condition, null, 4)}`);
   } else if (MESSAGE_TYPE_NOTIFICATION === req.headers[MESSAGE_TYPE]) {
-    notification.event.broadcaster_user_id = "151809327"; // as we use twitch CLI for now, force a given user (samyz_)
     console.log(
       "Received notification for broadcaster:",
       notification.event.broadcaster_user_id,

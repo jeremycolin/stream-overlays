@@ -10,7 +10,8 @@
   ],
   "scripts": {
     "build": "yarn workspaces run build",
-    "start": "node packages/server/dist/index.js"
+    "start": "node packages/server/dist/index.js",
+    "postinstall": "yarn workspace api build"
   },
   "dependencies": {
     "prettier": "^2.5.1",

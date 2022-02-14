@@ -17,8 +17,12 @@ const axios = axiosModule.create({
 });
 
 function logError(err: any) {
-  console.log(err.response.status);
-  console.log(err.response);
+  try {
+    console.error(err.response);
+    console.error(err.response.status);
+  } catch (unknownErr) {
+    console.error("something went really wrong: ", unknownErr);
+  }
 }
 
 export async function getBroadcasterIdFromUser(user: string): Promise<string | null> {

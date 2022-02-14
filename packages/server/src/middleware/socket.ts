@@ -23,7 +23,11 @@ export async function socketMiddleWare(socket: Socket) {
     ])
   ).flat();
 
-  addBroadcasterSubscription(brodcasterUserId, (event) => socket.emit(event.type, event));
+  console.log("brodcasterUserId: ", brodcasterUserId);
+  addBroadcasterSubscription(brodcasterUserId, (event) => {
+    console.log("EMITTING: ,", event);
+    socket.emit(event.type, event);
+  });
 
   socket.on("disconnect", () => {
     clearBroadCasterSubscriptions(brodcasterUserId);
