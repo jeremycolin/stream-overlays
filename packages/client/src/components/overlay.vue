@@ -18,7 +18,7 @@ let graphics
 let followText
 
 // TODO: preload sound + video
-var audio = new Audio('/src/assets/follow.wav');
+const audio = new Audio('/src/assets/follow.wav');
 
 export default {
   name: 'overlay',
@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     drawFollowEvent() {
+      followText.text = `bienvenue ${this.followEvent.user_name}!`;
       // TODO: update the text from the event
       gsap.set(graphics, {
         width: 1
