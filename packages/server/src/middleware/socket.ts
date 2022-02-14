@@ -1,38 +1,77 @@
-import { EventTypesEnum } from "api";
-import { Socket } from "socket.io";
-import { addBroadcasterSubscription, clearBroadCasterSubscriptions } from "../events/broadcast";
+import { EventTypesEnum, SubscriptionEvent } from "api";
+import { Server, Socket } from "socket.io";
+import { cleanBroadCasterSubscriptions, getBroadcasterSubscriptions, setBroadcasterSubscriptions } from "../events/broadcast";
 import { deleteSubscription, getBroadcasterIdFromUser, getOrSubscribeToType } from "../apis/twitch";
 
-export async function socketMiddleWare(socket: Socket) {
-  const user = socket.handshake.query.user as string;
-  console.log(`${user} connected`);
+export const socketMiddleWare = (io: Server) => {
+  const emitToRoom = (broadcasterUserId: string, eventType: EventTypesEnum, event: SubscriptionEvent) => {
+    io.to(broadcasterUserId).emit(eventType, event);
+  };
 
-  const brodcasterUserId = await getBroadcasterIdFromUser(user);
-  if (!brodcasterUserId) {
-    console.warn(`${user} not found, disconnecting socket`);
-    socket.disconnect();
-    return;
-  }
-  console.log("brodcasterUserId: ", brodcasterUserId);
+  io.of("/").adapter.on("join-room", async (broadcasterUserId, socketId) => {
+    if (broadcasterUserId === socketId) {
+      // this is the default room created by the socket, ignoring
+      return;
+    }
 
-  const subscriptions = (
-    await Promise.all([
-      getOrSubscribeToType(brodcasterUserId, EventTypesEnum.FOLLOW),
-      // getOrSubscribeToType(brodcasterUserId, EventTypesEnum.SUBSCRIBE), // needs broadcaster oauth
-      // getOrSubscribeToType(brodcasterUserId, EventTypesEnum.GIFT), // needs broadcaster oauth
-      // getOrSubscribeToType(brodcasterUserId, EventTypesEnum.RAID), // works but useless for now
-    ])
-  ).flat();
+    if (io.of("/").adapter.rooms.get(broadcasterUserId)?.size === 1) {
+      // if the room size is 1, it means we are the first socket in the broadcaster room
+      // we subscribe to events we want to published for via Twitch API
+      console.debug("subscribing to", broadcasterUserId);
+      const subscriptions = (
+        await Promise.all([
+          getOrSubscribeToType(broadcasterUserId, EventTypesEnum.FOLLOW),
+          // getOrSubscribeToType(broadcasterUserId, EventTypesEnum.SUBSCRIBE), // needs broadcaster oauth
+          // getOrSubscribeToType(broadcasterUserId, EventTypesEnum.GIFT), // needs broadcaster oauth
+          // getOrSubscribeToType(broadcasterUserId, EventTypesEnum.RAID), // works but useless for now
+        ])
+      ).flat();
 
-  addBroadcasterSubscription(brodcasterUserId, (event) => {
-    console.debug("Emitting event: ", event);
-    socket.emit(event.type, event);
+      setBroadcasterSubscriptions(broadcasterUserId, subscriptions, (event) => {
+        console.debug("Emitting event: ", event);
+        emitToRoom(broadcasterUserId, event.type, event);
+      });
+    }
   });
 
-  socket.on("disconnect", () => {
-    clearBroadCasterSubscriptions(brodcasterUserId);
+  io.of("/").adapter.on("leave-room", (broadcasterUserId, socketId) => {
+    if (broadcasterUserId === socketId) {
+      // this is the default room created by the socket, ignoring
+      return;
+    }
 
-    subscriptions.forEach((sub) => deleteSubscription(sub.id));
-    console.log(`${user} disconnected`);
+    if (io.of("/").adapter.rooms.get(broadcasterUserId)?.size === 0) {
+      // if the room is size 0, it means we are the last socket in the broadcaster room
+      // we clean up Twitch API subscriptions
+      console.debug("Cleaning subscriptions to", broadcasterUserId);
+
+      const broadcasterSubscriptions = getBroadcasterSubscriptions(broadcasterUserId);
+      if (!broadcasterSubscriptions) {
+        return; // this should never happen in practice
+      }
+
+      const { twitchSubscriptions } = broadcasterSubscriptions;
+      cleanBroadCasterSubscriptions(broadcasterUserId);
+      twitchSubscriptions.forEach((sub) => deleteSubscription(sub.id));
+    }
   });
-}
+
+  return async (socket: Socket) => {
+    const user = socket.handshake.query.user as string;
+    console.log(`${user} connected`);
+
+    const broadcasterUserId = await getBroadcasterIdFromUser(user);
+    if (!broadcasterUserId) {
+      console.warn(`${user} not found, disconnecting socket`);
+      socket.disconnect();
+      return;
+    }
+    console.log("broadcasterUserId:", broadcasterUserId);
+
+    socket.join(broadcasterUserId); // join the broadcaster room
+
+    socket.on("disconnect", () => {
+      console.log(`${user} disconnected`);
+    });
+  };
+};
