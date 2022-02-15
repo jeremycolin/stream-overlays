@@ -1,12 +1,15 @@
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import App from "./App.vue";
-import waitingScreen from "./components/waitingScreen.vue";
-import broadcastOverlay from "./components/overlay.vue";
+import startScene from "./scenes/start.vue";
+import liveScene from "./scenes/live.vue";
+import endScene from "./scenes/end.vue";
 
 const routes = [
-  { path: "/:user/", component: waitingScreen },
-  { path: "/:user/overlay", component: broadcastOverlay },
+  { path: "/:user/", component: startScene },
+  { path: "/:user/start", component: startScene },
+  { path: "/:user/live", component: liveScene },
+  { path: "/:user/end", component: endScene },
 ];
 
 const router = createRouter({

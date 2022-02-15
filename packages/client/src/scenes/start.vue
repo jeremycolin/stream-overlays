@@ -1,4 +1,6 @@
 <script>
+import followCode from "../alerts/followCode.vue";
+
 import * as PIXI from "pixi.js";
 import { CRTFilter, RGBSplitFilter, GlitchFilter } from "pixi-filters";
 import backgroundUrl from "../assets/background-code.png";
@@ -10,15 +12,20 @@ const app = new PIXI.Application({
 });
 
 export default {
-  name: "waiting-screen",
+  name: "startScene",
+  components: {
+    followCode: followCode,
+  },
   mounted() {
+    console.log("Scene -> start");
+
     this.$el.appendChild(app.view);
     const stage = new PIXI.Container();
     app.stage.addChild(stage);
     let renderer = PIXI.autoDetectRenderer();
 
     let ticker = PIXI.Ticker.shared;
-    ticker.add(function (time) {
+    ticker.add(() => {
       filterCRT.seed = Math.random();
       filterCRT.time += 0.5;
 
@@ -81,7 +88,9 @@ export default {
 </script>
 
 <template>
-  <div class="waiting-screen"></div>
+  <div class="waiting-screen">
+    <followCode></followCode>
+  </div>
 </template>
 
 <style lang="scss">
@@ -94,7 +103,7 @@ export default {
   // Lory je sais que je devrais faire ça en css grid
   canvas {
     position: absolute;
-    z-index: -1;
+    z-index: 0;
     top: 0;
     left: 0;
     right: 0;
