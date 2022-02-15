@@ -1,4 +1,6 @@
 <script>
+import followFilou from "../alerts/followFilou.vue";
+
 import * as PIXI from "pixi.js";
 import { CRTFilter, RGBSplitFilter, GlitchFilter } from "pixi-filters";
 import backgroundUrl from "../assets/background-code.png";
@@ -10,8 +12,13 @@ const app = new PIXI.Application({
 });
 
 export default {
-  name: "waiting-screen",
+  name: "startScene",
+  components: {
+    followFilou: followFilou,
+  },
   mounted() {
+    console.log("Scene -> start");
+
     this.$el.appendChild(app.view);
     const stage = new PIXI.Container();
     app.stage.addChild(stage);
@@ -81,7 +88,9 @@ export default {
 </script>
 
 <template>
-  <div class="waiting-screen"></div>
+  <div class="waiting-screen">
+    <followFilou></followFilou>
+  </div>
 </template>
 
 <style lang="scss">
@@ -94,7 +103,7 @@ export default {
   // Lory je sais que je devrais faire ça en css grid
   canvas {
     position: absolute;
-    z-index: -1;
+    z-index: 0;
     top: 0;
     left: 0;
     right: 0;

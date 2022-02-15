@@ -1,6 +1,6 @@
 <script>
 import { computed } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { io } from "socket.io-client";
 import { EventTypes } from "api";
 
@@ -8,6 +8,7 @@ export default {
   data() {
     return {
       followEvent: {},
+      isDev: isDev,
     };
   },
   provide() {
@@ -32,10 +33,12 @@ export default {
 </script>
 
 <template>
-  <router-view></router-view>
+  <div class="stream-overlay" :class="{ isDev: isDev }">
+    <router-view></router-view>
+  </div>
 </template>
 
-<style>
+<style lang="scss">
 body {
   margin: 0;
   padding: 0;
@@ -45,5 +48,18 @@ body {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.stream-overlay {
+  display: flex;
+  width: 1920px;
+  height: 1080px;
+
+  &.isDev {
+    background-image: url("./assets/background-dev.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
 }
 </style>
