@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-  <div class="stream-overlay" :class="{ isDev: isDev }">
+  <div class="stream-overlay" :class="{ 'is-dev': isDev }">
     <router-view></router-view>
   </div>
 </template>
@@ -55,8 +55,8 @@ body {
   width: 1920px;
   height: 1080px;
 
-  &.isDev {
-    background-image: url("./assets/background-dev.jpg");
+  &.is-dev {
+    background-image: url("@/assets/background-dev.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;

@@ -5,6 +5,8 @@ import { PixiPlugin } from "gsap/PixiPlugin.js";
 import { RGBSplitFilter, GlitchFilter, DropShadowFilter } from "pixi-filters";
 import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 
+import { addToPixiLoader } from "../utils.js";
+
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);
 
@@ -41,12 +43,7 @@ export default {
   async mounted() {
     gsap.set(this.$refs.notification, { autoAlpha: 0 });
 
-    app.loader.add({ name: "From Google 1", url: "https://fonts.googleapis.com/css2?family=Source+Code+Pro" });
-
-    const pixiLoader = new Promise((resolve) => {
-      app.loader.load(() => resolve());
-    });
-    await pixiLoader;
+    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Source+Code+Pro");
 
     ticker.add(() => {
       filterGlitch.seed = Math.random();

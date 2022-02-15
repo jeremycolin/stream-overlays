@@ -6,6 +6,8 @@ import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 import { DropShadowFilter } from "pixi-filters";
 import followSound from "../assets/follow.wav";
 
+import { addToPixiLoader } from "../utils.js";
+
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);
 
@@ -66,13 +68,7 @@ export default {
     this.$refs.video.pause();
     gsap.set(this.$refs.notification, { y: -525 });
 
-    // Load directly from google CSS!
-    app.loader.add({ name: "From Google 1", url: "https://fonts.googleapis.com/css2?family=Bangers" });
-
-    const pixiLoader = new Promise((resolve) => {
-      app.loader.load(() => resolve());
-    });
-    await pixiLoader;
+    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Bangers");
 
     followText = new PIXI.Text("Bienvenue Jean Michel!", {
       fontFamily: "Bangers",
