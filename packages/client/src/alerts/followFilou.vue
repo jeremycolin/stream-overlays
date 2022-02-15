@@ -41,7 +41,8 @@ export default {
       gsap.set(followText, { y: 220 / 2 });
 
       this.$refs.video.play();
-      gsap.to(this.$refs.notification, 1.5, {
+      gsap.to(this.$refs.notification, {
+        duration: 1.5,
         y: 25, // appearing from the top
         repeat: 1, // we repeat only once
         repeatDelay: 4, // how long it stays on the screen
@@ -50,12 +51,14 @@ export default {
       });
 
       // Animate mask to reveal the text
-      gsap.to(graphics, 1.9, {
+      gsap.to(graphics, {
+        duration: 1.9,
         width: 500,
         delay: 1.95,
       });
 
-      gsap.to(followText, 5, {
+      gsap.to(followText, {
+        duration: 5,
         y: -179,
         delay: 5,
         ease: Elastic.easeOut.config(1, 0.3),

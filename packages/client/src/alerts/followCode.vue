@@ -32,7 +32,8 @@ export default {
   methods: {
     drawFollowEvent() {
       followText.text = ` followers.add(\"${this.followEvent.user_name.toLowerCase()}\") `;
-      gsap.to(this.$refs.notification, 0.5, {
+      gsap.to(this.$refs.notification, {
+        duration: 0.5,
         autoAlpha: 1, // appearing from the top
         repeat: 1, // we repeat only once
         repeatDelay: 4, // how long it stays on the screen
