@@ -1,5 +1,5 @@
 <script>
-import followFilou from "../alerts/followFilou.vue";
+import followCode from "../alerts/followCode.vue";
 
 import * as PIXI from "pixi.js";
 import { CRTFilter, RGBSplitFilter, GlitchFilter } from "pixi-filters";
@@ -14,7 +14,7 @@ const app = new PIXI.Application({
 export default {
   name: "startScene",
   components: {
-    followFilou: followFilou,
+    followCode: followCode,
   },
   mounted() {
     console.log("Scene -> start");
@@ -25,7 +25,7 @@ export default {
     let renderer = PIXI.autoDetectRenderer();
 
     let ticker = PIXI.Ticker.shared;
-    ticker.add(function (time) {
+    ticker.add(() => {
       filterCRT.seed = Math.random();
       filterCRT.time += 0.5;
 
@@ -89,7 +89,7 @@ export default {
 
 <template>
   <div class="waiting-screen">
-    <followFilou></followFilou>
+    <followCode></followCode>
   </div>
 </template>
 

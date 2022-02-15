@@ -32,8 +32,9 @@ export default {
   },
   methods: {
     drawFollowEvent() {
+      // update the text from the event
       followText.text = ` Bienvenue ${this.followEvent.user_name}! `;
-      // TODO: update the text from the event
+
       gsap.set(graphics, { width: 1 });
       gsap.set(followText, { y: 220 / 2 });
 
@@ -61,46 +62,50 @@ export default {
       audio.play();
     },
   },
-  mounted() {
+  async mounted() {
     this.$refs.video.pause();
     gsap.set(this.$refs.notification, { y: -525 });
 
     // Load directly from google CSS!
     app.loader.add({ name: "From Google 1", url: "https://fonts.googleapis.com/css2?family=Bangers" });
-    app.loader.load(() => {
-      followText = new PIXI.Text("Bienvenue Jean Michel!", {
-        fontFamily: "Bangers",
-        fontSize: 38,
-        fontWeight: "400",
-        letterSpacing: 2,
-        fill: 0xffffff,
-        wordWrap: false,
-        align: "center",
-      });
 
-      followText.anchor.set(0.5);
-      followText.x = 500 / 2;
-      followText.y = 220 / 2;
-
-      const filterDropshadow = new DropShadowFilter();
-      followText.filters = [filterDropshadow];
-
-      stage.addChild(followText);
-
-      this.$refs.canvas.appendChild(app.view);
-      app.stage.addChild(stage);
-
-      graphics = new PIXI.Graphics();
-
-      // MASK
-      graphics.beginFill(0xde3249);
-      graphics.drawRect(0, 0, 1, 500);
-      graphics.endFill();
-
-      followText.mask = graphics;
-
-      stage.addChild(graphics);
+    const pixiLoader = new Promise((resolve) => {
+      app.loader.load(() => resolve());
     });
+    await pixiLoader;
+
+    followText = new PIXI.Text("Bienvenue Jean Michel!", {
+      fontFamily: "Bangers",
+      fontSize: 38,
+      fontWeight: "400",
+      letterSpacing: 2,
+      fill: 0xffffff,
+      wordWrap: false,
+      align: "center",
+    });
+
+    followText.anchor.set(0.5);
+    followText.x = 500 / 2;
+    followText.y = 220 / 2;
+
+    const filterDropshadow = new DropShadowFilter();
+    followText.filters = [filterDropshadow];
+
+    stage.addChild(followText);
+
+    this.$refs.canvas.appendChild(app.view);
+    app.stage.addChild(stage);
+
+    graphics = new PIXI.Graphics();
+
+    // MASK
+    graphics.beginFill(0xde3249);
+    graphics.drawRect(0, 0, 1, 500);
+    graphics.endFill();
+
+    followText.mask = graphics;
+
+    stage.addChild(graphics);
   },
 };
 </script>
