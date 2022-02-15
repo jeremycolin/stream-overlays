@@ -12,5 +12,6 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 
 ## Routes
 
-- `/samyz_` for the waiting screen
-- `/samyz_/overlay` for the alert overlay
+- `/samyz_` or `/samyz_/start` for the waiting screen
+- `/samyz_/live` for the alert only overlay
+- `/samyz_/end` for the end screen
