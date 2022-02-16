@@ -5,7 +5,20 @@ import avatarOne from "@/assets/anno/Beryl_O'Mara.png";
 import avatarTwo from "@/assets/anno/Carl_Leonard_von_Malching.png";
 import avatarThree from "@/assets/anno/George_Smith.png";
 
-const avatar = [avatarOne, avatarTwo, avatarThree];
+const avatar = [
+  {
+    src: avatarOne,
+    title: "O'mara",
+  },
+  {
+    src: avatarTwo,
+    title: "Von Malching",
+  },
+  {
+    src: avatarThree,
+    title: "Smith",
+  },
+];
 
 export default {
   name: "alert-follow-Anno",
@@ -23,13 +36,15 @@ export default {
   },
   methods: {
     drawFollowEvent() {
-      this.avatarSrc = avatar[Math.floor(Math.random() * avatar.length)];
+      const randomAvatar = avatar[Math.floor(Math.random() * avatar.length)];
+      this.avatarSrc = randomAvatar.src;
+
       // update the text from the event
-      this.userName = this.followEvent.user_name;
+      this.userName = `${this.followEvent.user_name} ${randomAvatar.title}`;
 
       gsap.to(this.$refs.notification, {
         duration: 0.5,
-        x: -15, // appearing from the top
+        x: -15, // appearing from the right
         repeat: 1, // we repeat only once
         repeatDelay: 4, // how long it stays on the screen
         yoyo: true, // yoyo = repeat the animation but reverse

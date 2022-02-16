@@ -1,5 +1,5 @@
 <script>
-import followFilou from "@/alerts/followAnno.vue";
+import followFilou from "@/alerts/followFilou.vue";
 
 import * as PIXI from "pixi.js";
 import backgroundUrl from "@/assets/background-askowbol.jpg";
