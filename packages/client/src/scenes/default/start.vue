@@ -1,9 +1,9 @@
 <script>
-import followCode from "../../alerts/followCode.vue";
+import followCode from "@/alerts/followCode.vue";
 
 import * as PIXI from "pixi.js";
 import { CRTFilter, RGBSplitFilter, GlitchFilter } from "pixi-filters";
-import backgroundUrl from "../../assets/background-code.png";
+import backgroundUrl from "@/assets/background-code.png";
 
 const app = new PIXI.Application({
   width: 1920,

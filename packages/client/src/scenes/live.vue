@@ -1,10 +1,10 @@
 <script>
-import followCode from "../alerts/followCode.vue";
+import followAnno from "@/alerts/followAnno.vue";
 
 export default {
   name: "liveScene",
   components: {
-    followCode,
+    followAnno,
   },
   mounted() {
     console.log("Scene -> live");
@@ -14,7 +14,7 @@ export default {
 
 <template>
   <div class="live-scene">
-    <followCode></followCode>
+    <followAnno></followAnno>
   </div>
 </template>
 

@@ -44,6 +44,14 @@ body {
   padding: 0;
 }
 
+* {
+  &,
+  &::before,
+  &::after {
+    box-sizing: border-box;
+  }
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -55,6 +63,7 @@ body {
   position: relative;
   width: 1920px;
   height: 1080px;
+  overflow: hidden;
 
   &.is-dev {
     background-image: url("@/assets/background-dev.jpg");

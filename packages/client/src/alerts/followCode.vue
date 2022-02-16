@@ -5,7 +5,7 @@ import { PixiPlugin } from "gsap/PixiPlugin.js";
 import { RGBSplitFilter, GlitchFilter, DropShadowFilter } from "pixi-filters";
 import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 
-import { addToPixiLoader } from "../utils.js";
+import { addToPixiLoader } from "@/utils.js";
 
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);

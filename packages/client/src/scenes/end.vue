@@ -1,5 +1,5 @@
 <script>
-import followFilou from "../alerts/followFilou.vue";
+import followFilou from "@/alerts/followFilou.vue";
 
 export default {
   name: "endScene",

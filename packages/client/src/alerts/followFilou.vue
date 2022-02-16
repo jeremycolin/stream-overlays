@@ -1,12 +1,12 @@
 <script>
 import * as PIXI from "pixi.js";
-import { gsap, Elastic } from "gsap";
+import { gsap } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
 import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 import { DropShadowFilter } from "pixi-filters";
-import followSound from "../assets/follow.wav";
+import followSound from "@/assets/follow.wav";
 
-import { addToPixiLoader } from "../utils.js";
+import { addToPixiLoader } from "@/utils.js";
 
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);
@@ -35,7 +35,7 @@ export default {
   methods: {
     drawFollowEvent() {
       // update the text from the event
-      followText.text = ` Bienvenue ${this.followEvent.user_name}! `;
+      followText.text = ` BIENVENUE ${this.followEvent.user_name.toUpperCase()}! `;
 
       gsap.set(graphics, { width: 1 });
       gsap.set(followText, { y: 220 / 2 });
@@ -47,7 +47,7 @@ export default {
         repeat: 1, // we repeat only once
         repeatDelay: 4, // how long it stays on the screen
         yoyo: true, // yoyo = repeat the animation but reverse
-        ease: Elastic.easeOut.config(1, 0.3),
+        ease: "elastic(1, 0.3)",
       });
 
       // Animate mask to reveal the text
@@ -61,7 +61,7 @@ export default {
         duration: 5,
         y: -179,
         delay: 5,
-        ease: Elastic.easeOut.config(1, 0.3),
+        ease: "elastic(1, 0.3)",
       });
 
       audio.play();
@@ -71,16 +71,17 @@ export default {
     this.$refs.video.pause();
     gsap.set(this.$refs.notification, { y: -525 });
 
-    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Bangers");
+    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco");
 
     followText = new PIXI.Text("Bienvenue Jean Michel!", {
-      fontFamily: "Bangers",
+      fontFamily: "Sue Ellen Francisco",
       fontSize: 38,
       fontWeight: "400",
-      letterSpacing: 2,
+      letterSpacing: 4,
       fill: 0xffffff,
       wordWrap: false,
       align: "center",
+      padding: 10,
     });
 
     followText.anchor.set(0.5);

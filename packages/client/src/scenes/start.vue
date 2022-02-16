@@ -1,5 +1,5 @@
 <template>
-  <component :is="scene" />
+  <component :is="scene"></component>
 </template>
 
 <script>
