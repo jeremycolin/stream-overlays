@@ -4,7 +4,7 @@ import followFilou from "../alerts/followFilou.vue";
 export default {
   name: "endScene",
   components: {
-    followFilou: followFilou,
+    followFilou,
   },
   mounted() {
     console.log("Scene -> end");

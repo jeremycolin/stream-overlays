@@ -52,6 +52,7 @@ body {
 
 .stream-overlay {
   display: flex;
+  position: relative;
   width: 1920px;
   height: 1080px;
 
