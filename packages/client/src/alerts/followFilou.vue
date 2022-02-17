@@ -1,55 +1,60 @@
 <script>
 import * as PIXI from "pixi.js";
-import { gsap, Elastic } from "gsap";
+import { gsap } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
 import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 import { DropShadowFilter } from "pixi-filters";
-import followSound from "../assets/follow.wav";
+import followSound from "@/assets/follow.wav";
 
-import { addToPixiLoader } from "../utils.js";
+import { addToPixiLoader } from "@/utils.js";
 
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);
 
-const app = new PIXI.Application({
-  width: 500,
-  height: 220,
-  backgroundAlpha: 0,
-});
+// Pixi variables
+let app = null;
+let stage = null;
+let graphics = null;
+let followText = null;
+let filterDropshadow = null;
 
-const stage = new PIXI.Container();
-let graphics;
-let followText;
-
-// TODO: preload sound + video
-const audio = new Audio(followSound);
+let audio = null;
+let tl;
+let index;
+let events;
 
 export default {
   name: "alert-follow-Filou",
   inject: ["followEvent"],
   watch: {
-    followEvent() {
-      this.drawFollowEvent();
+    followEvent(newVal) {
+      if (newVal) {
+        events.push(newVal);
+        let anim = this.getAnimation();
+        tl.add(anim);
+        tl.play();
+      }
     },
   },
   methods: {
-    drawFollowEvent() {
-      // update the text from the event
-      followText.text = ` Bienvenue ${this.followEvent.user_name}! `;
-
-      gsap.set(graphics, { width: 1 });
-      gsap.set(followText, { y: 220 / 2 });
-
-      this.$refs.video.play();
-      gsap.to(this.$refs.notification, {
+    getAnimation() {
+      return gsap.to(this.$refs.notification, {
         duration: 1.5,
         y: 25, // appearing from the top
         repeat: 1, // we repeat only once
         repeatDelay: 4, // how long it stays on the screen
         yoyo: true, // yoyo = repeat the animation but reverse
-        ease: Elastic.easeOut.config(1, 0.3),
+        ease: "elastic(1, 0.3)",
+        onStart: this.onAnimationStart,
+        onComplete: this.onAnimationComplete,
       });
+    },
+    onAnimationStart() {
+      const event = events[index];
+      followText.text = ` BIENVENUE ${this.followEvent.user_name.toUpperCase()}! `;
 
+      audio.play();
+      this.$refs.video.play();
       // Animate mask to reveal the text
       gsap.to(graphics, {
         duration: 1.9,
@@ -57,37 +62,60 @@ export default {
         delay: 1.95,
       });
 
-      gsap.to(followText, {
-        duration: 5,
-        y: -179,
-        delay: 5,
-        ease: Elastic.easeOut.config(1, 0.3),
-      });
-
-      audio.play();
+      console.log(index, " debug queue event timestamp: ", event.timestamp, event.user_name);
+      index++;
+    },
+    onAnimationComplete() {
+      this.$refs.video.pause();
+      // reset mask animation values
+      gsap.set(graphics, { width: 1 });
+    },
+    onQueueComplete() {
+      tl.clear();
+      events = [];
+      index = 0;
     },
   },
   async mounted() {
+    tl = gsap.timeline({
+      onComplete: this.onQueueComplete,
+    });
+    tl.pause();
+    events = [];
+    index = 0;
+
+    app = new PIXI.Application({
+      width: 500,
+      height: 220,
+      backgroundAlpha: 0,
+    });
+
+    stage = new PIXI.Container();
+
+    // TODO: preload sound + video
+    audio = new Audio(followSound);
+
     this.$refs.video.pause();
     gsap.set(this.$refs.notification, { y: -525 });
 
-    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Bangers");
+    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco");
 
     followText = new PIXI.Text("Bienvenue Jean Michel!", {
-      fontFamily: "Bangers",
+      fontFamily: "Sue Ellen Francisco",
       fontSize: 38,
       fontWeight: "400",
-      letterSpacing: 2,
+      letterSpacing: 4,
       fill: 0xffffff,
       wordWrap: false,
       align: "center",
+      padding: 10,
     });
 
     followText.anchor.set(0.5);
     followText.x = 500 / 2;
     followText.y = 220 / 2;
 
-    const filterDropshadow = new DropShadowFilter();
+    filterDropshadow = new DropShadowFilter();
     followText.filters = [filterDropshadow];
 
     stage.addChild(followText);
@@ -105,6 +133,19 @@ export default {
     followText.mask = graphics;
 
     stage.addChild(graphics);
+  },
+  unmounted() {
+    app.destroy(true, { children: true });
+    stage = null;
+    graphics = null;
+    followText = null;
+    filterDropshadow = null;
+
+    audio = null;
+
+    tl.kill();
+    index = 0;
+    events = [];
   },
 };
 </script>
