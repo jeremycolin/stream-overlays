@@ -70,9 +70,16 @@ export default {
       // reset mask animation values
       gsap.set(graphics, { width: 1 });
     },
+    onQueueComplete() {
+      tl.clear();
+      events = [];
+      index = 0;
+    },
   },
   async mounted() {
-    tl = gsap.timeline();
+    tl = gsap.timeline({
+      onComplete: this.onQueueComplete,
+    });
     tl.pause();
     events = [];
     index = 0;

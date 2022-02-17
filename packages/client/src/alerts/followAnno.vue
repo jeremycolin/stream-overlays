@@ -64,10 +64,17 @@ export default {
       console.log(index, " debug queue event timestamp: ", event.timestamp, event.user_name);
       index++;
     },
+    onQueueComplete() {
+      tl.clear();
+      events = [];
+      index = 0;
+    },
   },
   mounted() {
     gsap.set(this.$refs.notification, { x: "+=110%" });
-    tl = gsap.timeline();
+    tl = gsap.timeline({
+      onComplete: this.onQueueComplete,
+    });
     tl.pause();
     events = [];
     index = 0;
