@@ -11,18 +11,14 @@ import { addToPixiLoader } from "@/utils.js";
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);
 
-const app = new PIXI.Application({
-  width: 500,
-  height: 220,
-  backgroundAlpha: 0,
-});
+// Pixi variables
+let app = null;
+let stage = null;
+let graphics = null;
+let followText = null;
+let filterDropshadow = null;
 
-const stage = new PIXI.Container();
-let graphics;
-let followText;
-
-// TODO: preload sound + video
-const audio = new Audio(followSound);
+let audio = null;
 
 export default {
   name: "alert-follow-Filou",
@@ -68,6 +64,17 @@ export default {
     },
   },
   async mounted() {
+    app = new PIXI.Application({
+      width: 500,
+      height: 220,
+      backgroundAlpha: 0,
+    });
+
+    stage = new PIXI.Container();
+
+    // TODO: preload sound + video
+    audio = new Audio(followSound);
+
     this.$refs.video.pause();
     gsap.set(this.$refs.notification, { y: -525 });
 
@@ -88,7 +95,7 @@ export default {
     followText.x = 500 / 2;
     followText.y = 220 / 2;
 
-    const filterDropshadow = new DropShadowFilter();
+    filterDropshadow = new DropShadowFilter();
     followText.filters = [filterDropshadow];
 
     stage.addChild(followText);
@@ -106,6 +113,15 @@ export default {
     followText.mask = graphics;
 
     stage.addChild(graphics);
+  },
+  unmounted() {
+    app.destroy(true, { children: true });
+    stage = null;
+    graphics = null;
+    followText = null;
+    filterDropshadow = null;
+
+    audio = null;
   },
 };
 </script>

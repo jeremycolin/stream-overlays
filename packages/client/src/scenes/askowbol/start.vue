@@ -11,11 +11,19 @@ import { addToPixiLoader } from "@/utils.js";
 
 gsap.registerPlugin(PixiPlugin);
 
-const app = new PIXI.Application({
-  width: 1920,
-  height: 1080,
-  backgroundAlpha: 0,
-});
+// Pixi variables
+let app;
+let stage;
+let filterNoise;
+let filterMotionBlur;
+let filterDropshadow;
+let texture;
+let background;
+let textOne;
+let textTwo;
+let textThree;
+let graphics;
+let tl;
 
 export default {
   name: "startScene",
@@ -23,26 +31,31 @@ export default {
     followFilou,
   },
   async mounted() {
-    console.log("Scene -> start");
+    console.log("Scene -> Start");
+
+    app = new PIXI.Application({
+      width: 1920,
+      height: 1080,
+      backgroundAlpha: 0,
+    });
 
     this.$el.appendChild(app.view);
-    const stage = new PIXI.Container();
+    stage = new PIXI.Container();
     app.stage.addChild(stage);
-    let renderer = PIXI.autoDetectRenderer();
 
     // FILTERS
-    const filterNoise = new PIXI.filters.NoiseFilter();
+    filterNoise = new PIXI.filters.NoiseFilter();
     filterNoise.noise = 0.1;
     filterNoise.seed = 0.01;
 
-    const filterMotionBlur = new MotionBlurFilter();
+    filterMotionBlur = new MotionBlurFilter();
     filterMotionBlur.kernelSize = 15;
 
-    const filterDropshadow = new DropShadowFilter();
+    filterDropshadow = new DropShadowFilter();
 
     // BACKGROUND IMAGE
-    const texture = PIXI.Texture.from(backgroundUrl);
-    const background = new PIXI.Sprite(texture);
+    texture = PIXI.Texture.from(backgroundUrl);
+    background = new PIXI.Sprite(texture);
 
     background.anchor.set(0.5);
     background.x = 1920 / 2;
@@ -55,7 +68,7 @@ export default {
     await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco");
 
     // TEXT
-    let textOne = new PIXI.Text("ÇA", {
+    textOne = new PIXI.Text("ÇA", {
       fontFamily: "Sue Ellen Francisco",
       fontSize: 90,
       padding: 50,
@@ -69,7 +82,7 @@ export default {
     textOne.filters = [filterMotionBlur, filterDropshadow];
     stage.addChild(textOne);
 
-    let textTwo = new PIXI.Text("COMMENCE", {
+    textTwo = new PIXI.Text("COMMENCE", {
       fontFamily: "Sue Ellen Francisco",
       fontSize: 200,
       padding: 50,
@@ -83,7 +96,7 @@ export default {
     textTwo.filters = [filterMotionBlur, filterDropshadow];
     stage.addChild(textTwo);
 
-    let textThree = new PIXI.Text("BIENTÔT", {
+    textThree = new PIXI.Text("BIENTÔT", {
       fontFamily: "Sue Ellen Francisco",
       fontSize: 90,
       padding: 50,
@@ -98,7 +111,7 @@ export default {
     stage.addChild(textThree);
 
     // TOP AND BOTTOM BAR
-    const graphics = new PIXI.Graphics();
+    graphics = new PIXI.Graphics();
 
     graphics.beginFill(0x000000);
     graphics.drawRect(0, 0, 1920, 100);
@@ -112,16 +125,15 @@ export default {
     app.stage.addChild(graphics);
 
     // TICKER FOR FILTER ANIMATION
-    let ticker = PIXI.Ticker.shared;
-    ticker.add(() => {
+    gsap.ticker.add(() => {
       filterNoise.noise = Math.random() / 5;
       filterNoise.seed = Math.random() / 10;
       filterMotionBlur.velocity.x = Math.random() * 10;
       filterMotionBlur.velocity.y = Math.random() * 20;
-      renderer.render(stage);
+      app.ticker.update();
     });
 
-    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+    tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
 
     tl.to(textOne, { y: 370, duration: 0.5, ease: "power3.inOut" });
     tl.to(textTwo, { y: 1080 / 2, duration: 0.5, ease: "power3.inOut" });
@@ -129,6 +141,20 @@ export default {
     tl.to(textOne, { y: 1080, duration: 0.5, ease: "power3.inOut" }, "+=10");
     tl.to(textTwo, { y: 1200, duration: 0.5, ease: "power3.inOut" }, "-=0.5");
     tl.to(textThree, { y: 1080, duration: 0.5, ease: "power3.inOut" }, "-=0.5");
+  },
+  unmounted() {
+    app.destroy(true, { children: true });
+    stage = null;
+    filterNoise = null;
+    filterMotionBlur = null;
+    filterDropshadow = null;
+    texture = null;
+    background = null;
+    textOne = null;
+    textTwo = null;
+    textThree = null;
+    graphics = null;
+    tl = null;
   },
 };
 </script>

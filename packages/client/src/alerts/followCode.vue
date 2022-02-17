@@ -10,16 +10,15 @@ import { addToPixiLoader } from "@/utils.js";
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);
 
-const app = new PIXI.Application({
-  width: 1920,
-  height: 220,
-  backgroundAlpha: 0,
-});
-
-const stage = new PIXI.Container();
-let ticker = PIXI.Ticker.shared;
-let renderer = PIXI.autoDetectRenderer();
+// Pixi variables
+let app;
+let stage;
+let ticker;
+let renderer;
 let followText;
+let filterDropshadow;
+let filterGlitch;
+let filterTextRGB;
 
 export default {
   name: "alert-follow-code",
@@ -42,6 +41,16 @@ export default {
     },
   },
   async mounted() {
+    app = new PIXI.Application({
+      width: 1920,
+      height: 220,
+      backgroundAlpha: 0,
+    });
+
+    stage = new PIXI.Container();
+    ticker = PIXI.Ticker.shared;
+    renderer = PIXI.autoDetectRenderer();
+
     gsap.set(this.$refs.notification, { autoAlpha: 0 });
 
     await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Source+Code+Pro");
@@ -68,9 +77,9 @@ export default {
 
     followText.x = 25;
     followText.y = 25;
-    const filterDropshadow = new DropShadowFilter();
-    const filterGlitch = new GlitchFilter();
-    const filterTextRGB = new RGBSplitFilter();
+    filterDropshadow = new DropShadowFilter();
+    filterGlitch = new GlitchFilter();
+    filterTextRGB = new RGBSplitFilter();
     filterTextRGB.red = [-2, 0];
     filterTextRGB.green = [0, 2];
     filterTextRGB.blue = [0, 0];
@@ -80,6 +89,16 @@ export default {
 
     this.$refs.canvas.appendChild(app.view);
     app.stage.addChild(stage);
+  },
+  unmounted() {
+    app.destroy(true, { children: true });
+    stage = null;
+    ticker = null;
+    renderer = null;
+    followText = null;
+    filterDropshadow = null;
+    filterGlitch = null;
+    filterTextRGB = null;
   },
 };
 </script>
