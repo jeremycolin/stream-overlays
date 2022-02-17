@@ -143,9 +143,9 @@ export default {
 
     audio = null;
 
-    tl = null;
-    index = null;
-    events = null;
+    tl.kill();
+    index = 0;
+    events = [];
   },
 };
 </script>

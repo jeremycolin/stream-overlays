@@ -80,7 +80,7 @@ export default {
     index = 0;
   },
   unmounted() {
-    tl = null;
+    tl.kill();
     index = 0;
     events = [];
   },
