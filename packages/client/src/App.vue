@@ -23,8 +23,10 @@ export default {
     });
 
     socket.on(EventTypes.FOLLOW, (event) => {
-      console.log("Follow event: ", event);
-      this.followEvent = event;
+      if (!document.hidden) {
+        console.log("Follow event: ", event);
+        this.followEvent = event;
+      }
     });
     socket.on(EventTypes.SUBSCRIBE, (event) => console.log("Subscribe event: ", event));
     socket.on(EventTypes.RAID, (event) => console.log("Raid event: ", event));
