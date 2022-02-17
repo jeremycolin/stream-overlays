@@ -19,33 +19,42 @@ let followText = null;
 let filterDropshadow = null;
 
 let audio = null;
+let tl;
+let index;
+let events;
 
 export default {
   name: "alert-follow-Filou",
   inject: ["followEvent"],
   watch: {
-    followEvent() {
-      this.drawFollowEvent();
+    followEvent(newVal) {
+      if (newVal) {
+        events.push(newVal);
+        let anim = this.getAnimation();
+        tl.add(anim);
+        tl.play();
+      }
     },
   },
   methods: {
-    drawFollowEvent() {
-      // update the text from the event
-      followText.text = ` BIENVENUE ${this.followEvent.user_name.toUpperCase()}! `;
-
-      gsap.set(graphics, { width: 1 });
-      gsap.set(followText, { y: 220 / 2 });
-
-      this.$refs.video.play();
-      gsap.to(this.$refs.notification, {
+    getAnimation() {
+      return gsap.to(this.$refs.notification, {
         duration: 1.5,
         y: 25, // appearing from the top
         repeat: 1, // we repeat only once
         repeatDelay: 4, // how long it stays on the screen
         yoyo: true, // yoyo = repeat the animation but reverse
         ease: "elastic(1, 0.3)",
+        onStart: this.onAnimationStart,
+        onComplete: this.onAnimationComplete,
       });
+    },
+    onAnimationStart() {
+      const event = events[index];
+      followText.text = ` BIENVENUE ${this.followEvent.user_name.toUpperCase()}! `;
 
+      audio.play();
+      this.$refs.video.play();
       // Animate mask to reveal the text
       gsap.to(graphics, {
         duration: 1.9,
@@ -53,17 +62,21 @@ export default {
         delay: 1.95,
       });
 
-      gsap.to(followText, {
-        duration: 5,
-        y: -179,
-        delay: 5,
-        ease: "elastic(1, 0.3)",
-      });
-
-      audio.play();
+      console.log(index, " debug queue event timestamp: ", event.timestamp, event.user_name);
+      index++;
+    },
+    onAnimationComplete() {
+      this.$refs.video.pause();
+      // reset mask animation values
+      gsap.set(graphics, { width: 1 });
     },
   },
   async mounted() {
+    tl = gsap.timeline();
+    tl.pause();
+    events = [];
+    index = 0;
+
     app = new PIXI.Application({
       width: 500,
       height: 220,
@@ -122,6 +135,10 @@ export default {
     filterDropshadow = null;
 
     audio = null;
+
+    tl = null;
+    index = null;
+    events = null;
   },
 };
 </script>

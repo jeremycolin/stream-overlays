@@ -61,7 +61,7 @@ export default {
       this.avatarSrc = randomAvatar.src;
       this.userName = `${event.user_name} ${randomAvatar.title}`;
 
-      console.log("debug queue event timestamp: ", event.timestamp);
+      console.log(index, " debug queue event timestamp: ", event.timestamp, event.user_name);
       index++;
     },
   },
