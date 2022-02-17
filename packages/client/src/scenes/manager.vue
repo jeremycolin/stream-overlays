@@ -10,12 +10,16 @@ export default defineComponent({
   computed: {
     scene() {
       const { user, scene } = this.$route.params;
-      return defineAsyncComponent({
-        loader: () => import(`./${user}/${scene}.vue`),
-        errorComponent: defineAsyncComponent({
-          loader: () => import(`./default/${scene}.vue`),
-        }),
-        timeout: 5000,
+      return defineAsyncComponent(() => {
+        return new Promise(async (resolve) => {
+          try {
+            const component = await import(`./${user}/${scene}.vue`);
+            resolve(component);
+          } catch (err) {
+            const component = import(`./default/${scene}.vue`);
+            resolve(component);
+          }
+        });
       });
     },
   },
