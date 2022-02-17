@@ -20,6 +20,10 @@ const avatar = [
   },
 ];
 
+let tl;
+let index;
+let events;
+
 export default {
   name: "alert-follow-Anno",
   data() {
@@ -30,29 +34,48 @@ export default {
   },
   inject: ["followEvent"],
   watch: {
-    followEvent() {
-      this.drawFollowEvent();
+    followEvent(newVal) {
+      if (newVal) {
+        events.push(newVal);
+        let anim = this.getAnimation();
+        tl.add(anim);
+        tl.play();
+      }
     },
   },
   methods: {
-    drawFollowEvent() {
-      const randomAvatar = avatar[Math.floor(Math.random() * avatar.length)];
-      this.avatarSrc = randomAvatar.src;
-
-      // update the text from the event
-      this.userName = `${this.followEvent.user_name} ${randomAvatar.title}`;
-
-      gsap.to(this.$refs.notification, {
+    getAnimation() {
+      return gsap.to(this.$refs.notification, {
         duration: 0.5,
         x: -15, // appearing from the right
         repeat: 1, // we repeat only once
         repeatDelay: 4, // how long it stays on the screen
         yoyo: true, // yoyo = repeat the animation but reverse
+        onStart: this.onAnimationStart,
       });
     },
+    onAnimationStart() {
+      const event = events[index];
+      const randomAvatar = avatar[Math.floor(Math.random() * avatar.length)];
+
+      this.avatarSrc = randomAvatar.src;
+      this.userName = `${event.user_name} ${randomAvatar.title}`;
+
+      console.log("debug queue event timestamp: ", event.timestamp);
+      index++;
+    },
   },
-  async mounted() {
+  mounted() {
     gsap.set(this.$refs.notification, { x: "+=110%" });
+    tl = gsap.timeline();
+    tl.pause();
+    events = [];
+    index = 0;
+  },
+  unmounted() {
+    tl = null;
+    index = 0;
+    events = [];
   },
 };
 </script>
