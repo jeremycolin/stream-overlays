@@ -22,7 +22,7 @@ export default {
     followCode,
   },
   mounted() {
-    console.log("Scene -> start");
+    console.log("Scene -> Default Start");
     app = new PIXI.Application({
       width: 1920,
       height: 1080,

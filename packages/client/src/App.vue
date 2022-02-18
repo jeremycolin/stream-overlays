@@ -68,10 +68,7 @@ body {
   overflow: hidden;
 
   &.is-dev {
-    background-image: url("@/assets/background-dev.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+    background: grey;
   }
 }
 </style>

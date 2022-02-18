@@ -2,24 +2,24 @@
 import followFilou from "@/alerts/followFilou.vue";
 
 export default {
-  name: "endScene",
+  name: "liveScene",
   components: {
     followFilou,
   },
   mounted() {
-    console.log("Scene -> Default End");
+    console.log("Scene -> Askowbol live");
   },
 };
 </script>
 
 <template>
-  <div class="end-scene">
+  <div class="live-scene">
     <followFilou></followFilou>
   </div>
 </template>
 
 <style lang="scss">
-.end-scene {
+.live-scene {
   width: 100%;
   height: 100%;
 }
