@@ -94,6 +94,7 @@ export default {
 
     // TODO: preload sound + video
     audio = new Audio(followSound);
+    audio.volume = 0.35;
 
     this.$refs.video.pause();
     gsap.set(this.$refs.notification, { y: -525 });
