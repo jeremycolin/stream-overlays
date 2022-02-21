@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
 import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 import { DropShadowFilter } from "pixi-filters";
-import followSound from "@/assets/follow.wav";
+import followSound from "@/assets/sounds/follow.wav";
 
 import { addToPixiLoader } from "@/utils.js";
 
