@@ -3,7 +3,11 @@ import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
 import { WebfontLoaderPlugin } from "pixi-webfont-loader";
-import followSound from "@/assets/sounds/sot2.mp3";
+import followSoundOne from "@/assets/sounds/sot1.ogg";
+import followSoundTwo from "@/assets/sounds/sot2.mp3";
+import followSoundThree from "@/assets/sounds/sot3.ogg";
+import followSoundFour from "@/assets/sounds/sot4.ogg";
+import followSoundFive from "@/assets/sounds/sot5.ogg";
 
 import { addToPixiLoader } from "@/utils.js";
 
@@ -16,7 +20,6 @@ let stage = null;
 let graphics = null;
 let followText;
 
-let audio = null;
 let tl;
 let index;
 let events;
@@ -26,6 +29,14 @@ const notification = {
   width: 630,
   height: 130,
 };
+
+const notificationSound = [
+  new Audio(followSoundOne),
+  new Audio(followSoundTwo),
+  new Audio(followSoundThree),
+  new Audio(followSoundFour),
+  new Audio(followSoundFive),
+];
 
 const polygon = [
   {
@@ -149,7 +160,10 @@ export default {
       const event = events[index];
       followText.text = `${this.followEvent.user_name} rejoint l'équipage!`;
 
-      audio.play();
+      const randomAudio = notificationSound[Math.floor(Math.random() * notificationSound.length)];
+      randomAudio.volume = 0.75;
+      randomAudio.play();
+
       console.log(index, " debug queue event timestamp: ", event.timestamp, event.user_name);
       index++;
     },
@@ -166,8 +180,6 @@ export default {
     tl.pause();
     events = [];
     index = 0;
-    audio = new Audio(followSound);
-    audio.volume = 0.75;
 
     gsap.set(this.$refs.notification, { alpha: 0, y: -30 });
 
@@ -220,7 +232,6 @@ export default {
     graphics = null;
     followText = null;
 
-    audio = null;
     tl.kill();
     index = 0;
     events = [];
