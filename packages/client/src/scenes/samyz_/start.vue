@@ -116,7 +116,6 @@ export default {
   width: 100%;
   height: 100%;
 
-  // Lory je sais que je devrais faire ça en css grid
   canvas {
     position: absolute;
     z-index: 0;
