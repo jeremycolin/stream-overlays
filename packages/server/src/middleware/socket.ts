@@ -1,7 +1,7 @@
 import { EventTypesEnum, SubscriptionEvent } from "api";
 import { Server, Socket } from "socket.io";
 import { cleanBroadCasterSubscriptions, getBroadcasterSubscriptions, setBroadcasterSubscriptions } from "../events/broadcast";
-import { deleteSubscription, getBroadcasterIdFromUser, getOrSubscribeToType } from "../apis/twitch";
+import { deleteSubscription, getUserInfo, getOrSubscribeToType } from "../apis/twitch";
 
 export const socketMiddleWare = (io: Server) => {
   const emitToRoom = (broadcasterUserId: string, eventType: EventTypesEnum, event: SubscriptionEvent) => {
@@ -60,15 +60,15 @@ export const socketMiddleWare = (io: Server) => {
     const user = socket.handshake.query.user as string;
     console.log(`${user} connected`);
 
-    const broadcasterUserId = await getBroadcasterIdFromUser(user);
-    if (!broadcasterUserId) {
+    const broadcasterInfo = await getUserInfo(user);
+    if (!broadcasterInfo) {
       console.warn(`${user} not found, disconnecting socket`);
       socket.disconnect();
       return;
     }
-    console.log("broadcasterUserId:", broadcasterUserId);
+    console.log("broadcasterUserId:", broadcasterInfo.id);
 
-    socket.join(broadcasterUserId); // join the broadcaster room
+    socket.join(broadcasterInfo.id); // join the broadcaster room
 
     socket.on("disconnect", () => {
       console.log(`${user} disconnected`);

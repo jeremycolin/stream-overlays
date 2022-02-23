@@ -16,6 +16,9 @@ export interface FollowEvent {
   type: EventTypesEnum.FOLLOW;
   user_name: string;
   timestamp: string;
+  description: string;
+  display_name: string;
+  profile_image_url: string;
 }
 
 export interface SubEvent {

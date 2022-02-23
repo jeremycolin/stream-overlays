@@ -25,16 +25,6 @@ function logError(err: any) {
   }
 }
 
-export async function getBroadcasterIdFromUser(user: string): Promise<string | null> {
-  try {
-    const { data } = await axios.get(`/users?login=${user}`);
-    return data.data[0].id;
-  } catch (err) {
-    logError(err);
-    return null;
-  }
-}
-
 export interface TwitchSubscription {
   id: string;
   status: "webhook_callback_verification_pending" | "webhook_callback_verification_failed";
@@ -51,6 +41,24 @@ export interface TwitchSubscription {
 
 interface TwitchSubscriptionsReponse {
   data: { total: number; data: Array<TwitchSubscription> };
+}
+
+export interface TwitchUser {
+  description: string;
+  display_name: string;
+  id: string;
+  login: string; // user login name
+  profile_image_url: string;
+}
+
+export async function getUserInfo(user: string): Promise<TwitchUser | null> {
+  try {
+    const { data } = await axios.get(`/users?login=${user}`);
+    return data.data[0];
+  } catch (err) {
+    logError(err);
+    return null;
+  }
 }
 
 export async function getSubscriptionsByType(broadcasterUserId: string, type: EventTypesEnum): Promise<Array<TwitchSubscription>> {

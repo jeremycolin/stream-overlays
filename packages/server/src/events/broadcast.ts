@@ -1,5 +1,5 @@
 import { EventTypesEnum, SubscriptionEvent } from "api";
-import { TwitchSubscription } from "../apis/twitch";
+import { getUserInfo, TwitchSubscription } from "../apis/twitch";
 import {
   isTwitchFollowEvent,
   isTwitchGiftEvent,
@@ -28,7 +28,7 @@ export function cleanBroadCasterSubscriptions(broadcasterUserId: string) {
   broadcasterMap.delete(broadcasterUserId);
 }
 
-export function broadcastEvent({ event, subscription }: { event: TwitchEvent; subscription: TwitchNotificationSubscription }) {
+export async function broadcastEvent({ event, subscription }: { event: TwitchEvent; subscription: TwitchNotificationSubscription }) {
   const subscriptions = broadcasterMap.get(event.broadcaster_user_id);
   if (!subscriptions) {
     console.warn("Broadcaster", event.broadcaster_user_id, "has no active broadcast subscriptions");
@@ -37,10 +37,21 @@ export function broadcastEvent({ event, subscription }: { event: TwitchEvent; su
 
   let broadcastEvent: SubscriptionEvent;
   if (isTwitchFollowEvent(event, subscription.type)) {
+    // enrich event with Twitch user information
+    // if user follows, he has to exist, I know that's deep - here its just defensive coding
+    const { description, display_name, profile_image_url } = (await getUserInfo(event.user_login)) || {
+      description: "",
+      display_name: "",
+      profile_image_url: "",
+    };
+
     broadcastEvent = {
       type: EventTypesEnum.FOLLOW,
       timestamp: subscription.created_at,
       user_name: event.user_name,
+      description,
+      display_name,
+      profile_image_url,
     };
   } else if (isTwitchSubEvent(event, subscription.type)) {
     broadcastEvent = {
