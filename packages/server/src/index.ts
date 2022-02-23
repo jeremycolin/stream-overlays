@@ -20,7 +20,7 @@ app.use(
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         "connect-src": ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"],
         "font-src": ["'self'", "data:", "fonts.gstatic.com"],
-        "img-src": ["'self'", "data:", "fonts.gstatic.com"],
+        "img-src": ["'self'", "data:", "fonts.gstatic.com", "static-cdn.jtvnw.net"],
         "style-src": ["'self'", "'unsafe-inline'", "fonts.googleapis.com"],
         "script-src": ["'self'", "'unsafe-eval'"], // this is needed by pixi.js https://github.com/pixijs/pixijs/issues/7324,
       },
