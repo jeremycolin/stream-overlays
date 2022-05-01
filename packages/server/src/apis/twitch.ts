@@ -1,5 +1,6 @@
 import { EventTypesEnum } from "api";
 import axiosModule from "axios";
+import { getAccessToken } from "./oauth-twitch";
 
 const TWITCH_API_TOKEN = process.env.TWITCH_API_TOKEN!;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID!;
@@ -16,7 +17,24 @@ const axios = axiosModule.create({
   },
 });
 
-function logError(err: any) {
+axios.interceptors.response.use(
+  (response) => response,
+  async function (error) {
+    const originalRequest = error.config;
+    if (error.response.status === 401) {
+      console.log("Twitch access token expired, refreshing");
+      const twitchApiToken = await getAccessToken();
+      if (twitchApiToken) {
+        console.log("Twitch access token refresh successful");
+        (axios.defaults.headers as any)["Authorization"] = `Bearer ${twitchApiToken}`;
+        return axios(originalRequest);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+export function logError(err: any) {
   try {
     console.error(err.response);
     console.error(err.response.status);
