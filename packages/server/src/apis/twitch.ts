@@ -48,7 +48,7 @@ export function logError(err: any) {
   }
 }
 
-export function logErrorToDiscord(content: string) {
+function logErrorToDiscord(content: string) {
   const params = {
     username: "Askowbot",
     avatar_url: DISCORD_BOT_AVATAR_URL,
