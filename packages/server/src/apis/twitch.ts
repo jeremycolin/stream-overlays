@@ -5,11 +5,11 @@ import { getAccessToken } from "./oauth-twitch";
 const TWITCH_API_TOKEN = process.env.TWITCH_API_TOKEN!;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID!;
 const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET!;
+const DISCORD_HOOK_ID = process.env.DISCORD_HOOK_ID!;
 
 const TWITCH_API_BASE_PATH = "https://api.twitch.tv/helix/";
 const SUBSCRIPTION_CALLBACK = "https://streamoverlays.herokuapp.com/eventsub";
-const DISCORD_WEBHOOK =
-  "https://discord.com/api/webhooks/941783377739153559/clOcys5TAccF5wPQBTQnpo_R-oPAGsFSofK_bre0JhJtNK5S406utxCgHVk330EGMs6w";
+const DISCORD_WEBHOOK_BASE_PATH = "https://discord.com/api/webhooks/";
 const DISCORD_BOT_AVATAR_URL =
   "https://static-cdn.jtvnw.net/jtv_user_pictures/7129f22e-ba53-463a-b0cf-fcf712d96189-profile_image-70x70.png";
 
@@ -27,26 +27,19 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401) {
       console.log("Twitch access token expired, refreshing");
-      logErrorToDiscord("Twitch access token expired, refreshing");
       const twitchApiToken = await getAccessToken();
       if (twitchApiToken) {
         console.log("Twitch access token refresh successful");
+        logErrorToDiscord("Twitch access token expired, refreshing token was successful :)");
         (axios.defaults.headers as any)["Authorization"] = `Bearer ${twitchApiToken}`;
         return axios(originalRequest);
+      } else {
+        logErrorToDiscord("Twitch access token expired, refreshing token failed :(");
       }
     }
     return Promise.reject(error);
   }
 );
-
-export function logError(err: any) {
-  try {
-    console.error(err.response);
-    console.error(err.response.status);
-  } catch (unknownErr) {
-    console.error("something went really wrong: ", unknownErr);
-  }
-}
 
 function logErrorToDiscord(content: string) {
   const params = {
@@ -62,8 +55,18 @@ function logErrorToDiscord(content: string) {
     ],
   };
 
-  axios.post(DISCORD_WEBHOOK, params);
+  axios.post(`${DISCORD_WEBHOOK_BASE_PATH}${DISCORD_HOOK_ID}`, params);
 }
+
+export function logError(err: any) {
+  try {
+    console.error(err.response);
+    console.error(err.response.status);
+  } catch (unknownErr) {
+    console.error("something went really wrong: ", unknownErr);
+  }
+}
+
 export interface TwitchSubscription {
   id: string;
   status: "webhook_callback_verification_pending" | "webhook_callback_verification_failed";
