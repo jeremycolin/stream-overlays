@@ -8,6 +8,10 @@ const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET!;
 
 const TWITCH_API_BASE_PATH = "https://api.twitch.tv/helix/";
 const SUBSCRIPTION_CALLBACK = "https://streamoverlays.herokuapp.com/eventsub";
+const DISCORD_WEBHOOK =
+  "https://discord.com/api/webhooks/941783377739153559/clOcys5TAccF5wPQBTQnpo_R-oPAGsFSofK_bre0JhJtNK5S406utxCgHVk330EGMs6w";
+const DISCORD_BOT_AVATAR_URL =
+  "https://static-cdn.jtvnw.net/jtv_user_pictures/7129f22e-ba53-463a-b0cf-fcf712d96189-profile_image-70x70.png";
 
 const axios = axiosModule.create({
   baseURL: TWITCH_API_BASE_PATH,
@@ -23,6 +27,7 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401) {
       console.log("Twitch access token expired, refreshing");
+      logErrorToDiscord("Twitch access token expired, refreshing");
       const twitchApiToken = await getAccessToken();
       if (twitchApiToken) {
         console.log("Twitch access token refresh successful");
@@ -43,6 +48,22 @@ export function logError(err: any) {
   }
 }
 
+export function logErrorToDiscord(content: string) {
+  const params = {
+    username: "Askowbot",
+    avatar_url: DISCORD_BOT_AVATAR_URL,
+    embeds: [
+      {
+        title: "Error",
+        color: 16711680, // red
+        description: content,
+        timestamp: new Date(),
+      },
+    ],
+  };
+
+  axios.post(DISCORD_WEBHOOK, params);
+}
 export interface TwitchSubscription {
   id: string;
   status: "webhook_callback_verification_pending" | "webhook_callback_verification_failed";
