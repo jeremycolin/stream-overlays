@@ -8,7 +8,7 @@ const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET!;
 const DISCORD_HOOK_ID = process.env.DISCORD_HOOK_ID!;
 
 const TWITCH_API_BASE_PATH = "https://api.twitch.tv/helix/";
-const SUBSCRIPTION_CALLBACK = "https://streamoverlays.herokuapp.com/eventsub";
+const SUBSCRIPTION_CALLBACK = "https://stream-overlays-production.up.railway.app/eventsub";
 const DISCORD_WEBHOOK_BASE_PATH = "https://discord.com/api/webhooks/";
 const DISCORD_BOT_AVATAR_URL =
   "https://static-cdn.jtvnw.net/jtv_user_pictures/7129f22e-ba53-463a-b0cf-fcf712d96189-profile_image-70x70.png";

@@ -11,7 +11,7 @@ export default defineConfig({
   define: {
     isDev: process.env.NODE_ENV !== "production",
     __WEBSOCKET_ENDPOINT__: JSON.stringify(
-      process.env.NODE_ENV === "production" ? "wss://streamoverlays.herokuapp.com/" : "ws://localhost:3000/"
+      process.env.NODE_ENV === "production" ? "wss://stream-overlays-production.up.railway.app/" : "ws://localhost:3000/"
     ),
   },
   resolve: {

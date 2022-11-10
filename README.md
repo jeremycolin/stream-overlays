@@ -50,14 +50,14 @@ For `askowbol`: `http://localhost:5000/askowbol/live`
 
 ### Test on live
 
-For `samyz_`: `https://streamoverlays.herokuapp.com/samyz_/live`
+For `samyz_`: `https://stream-overlays-production.up.railway.app/samyz_/live`
 
 ```
-./twitch event trigger follow -F https://streamoverlays.herokuapp.com/eventsub -s YOUR_DARKEST_SECRET --to-user 151809327
+./twitch event trigger follow -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --to-user 151809327
 ```
 
-For `askowbol`: `https://streamoverlays.herokuapp.com/askowbol/live`
+For `askowbol`: `https://stream-overlays-production.up.railway.app/askowbol/live`
 
 ```
-./twitch event trigger follow -F https://streamoverlays.herokuapp.com/eventsub -s YOUR_DARKEST_SECRET --to-user 44105925
+./twitch event trigger follow -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --to-user 44105925
 ```

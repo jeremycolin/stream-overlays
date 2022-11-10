@@ -36,7 +36,7 @@ app.use(
 );
 
 app.get("/hello", (req, res) => {
-  res.status(200).send("Hello World, yay Heroku!");
+  res.status(200).send("Hello World, yay Railway!");
 });
 app.post("/eventsub", [twitchEventSubValidationMiddleWare, twitchEventSubMessageTypeMiddleWare]);
 
