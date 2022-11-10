@@ -1,8 +1,9 @@
 import { EventTypesEnum } from "api";
 import axiosModule from "axios";
+import { isDev } from "../config";
 import { getAccessToken } from "./oauth-twitch";
 
-const TWITCH_API_TOKEN = process.env.TWITCH_API_TOKEN!;
+let TWITCH_API_TOKEN = process.env.TWITCH_API_TOKEN!;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID!;
 const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET!;
 const DISCORD_HOOK_ID = process.env.DISCORD_HOOK_ID!;
@@ -29,9 +30,14 @@ axios.interceptors.response.use(
       console.log("Twitch access token expired, refreshing");
       const twitchApiToken = await getAccessToken();
       if (twitchApiToken) {
-        console.log("Twitch access token refresh successful");
         logErrorToDiscord("Twitch access token expired, refreshing token was successful :)");
-        (axios.defaults.headers as any)["Authorization"] = `Bearer ${twitchApiToken}`;
+        TWITCH_API_TOKEN = twitchApiToken;
+        const bearer = `Bearer ${twitchApiToken}`;
+        axios.defaults.headers["Authorization"] = bearer;
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: bearer,
+        };
         return axios(originalRequest);
       } else {
         logErrorToDiscord("Twitch access token expired, refreshing token failed :(");
@@ -42,6 +48,9 @@ axios.interceptors.response.use(
 );
 
 function logErrorToDiscord(content: string) {
+  if (isDev) {
+    return;
+  }
   const params = {
     username: "Askowbot",
     avatar_url: DISCORD_BOT_AVATAR_URL,
@@ -60,8 +69,9 @@ function logErrorToDiscord(content: string) {
 
 export function logError(err: any) {
   try {
+    console.log(err);
     console.error(err.response);
-    console.error(err.response.status);
+    // console.error(err.response.status);
   } catch (unknownErr) {
     console.error("something went really wrong: ", unknownErr);
   }
