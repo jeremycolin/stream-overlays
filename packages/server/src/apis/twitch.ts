@@ -69,9 +69,7 @@ function logErrorToDiscord(content: string) {
 
 export function logError(err: any) {
   try {
-    console.log(err);
     console.error(err.response);
-    // console.error(err.response.status);
   } catch (unknownErr) {
     console.error("something went really wrong: ", unknownErr);
   }
