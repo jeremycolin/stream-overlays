@@ -30,7 +30,8 @@ axios.interceptors.response.use(
       console.log("Twitch access token expired, refreshing");
       const twitchApiToken = await getAccessToken();
       if (twitchApiToken) {
-        logErrorToDiscord("Twitch access token expired, refreshing token was successful :)");
+        // logErrorToDiscord("Twitch access token expired, refreshing token was successful :)");
+        console.log("refreshing token was successful :)");
         TWITCH_API_TOKEN = twitchApiToken;
         const bearer = `Bearer ${twitchApiToken}`;
         axios.defaults.headers["Authorization"] = bearer;

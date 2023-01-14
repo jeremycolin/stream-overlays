@@ -31,10 +31,10 @@ export const socketMiddleWare = (io: Server) => {
         console.debug("Emitting event: ", event);
         emitToRoom(broadcasterUserId, event.type, event);
       });
-
-      const game_name = await getGame(broadcasterUserId);
-      emitToRoom(broadcasterUserId, EventTypesEnum.INFO, { type: EventTypesEnum.INFO, game_name });
     }
+
+    const game_name = await getGame(broadcasterUserId);
+    emitToRoom(broadcasterUserId, EventTypesEnum.INFO, { type: EventTypesEnum.INFO, game_name });
   });
 
   io.of("/").adapter.on("leave-room", (broadcasterUserId, socketId) => {
