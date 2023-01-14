@@ -1,4 +1,5 @@
 export const EventTypes = Object.freeze({
+  INFO: "channel.info",
   FOLLOW: "channel.follow",
   SUBSCRIBE: "channel.subscribe",
   GIFT: "channel.subscription.gift",
@@ -6,10 +7,16 @@ export const EventTypes = Object.freeze({
 });
 
 export const enum EventTypesEnum {
+  INFO = "channel.info",
   FOLLOW = "channel.follow",
   SUBSCRIBE = "channel.subscribe",
   GIFT = "channel.subscription.gift",
   RAID = "channel.raid",
+}
+
+export interface InfoEvent {
+  type: EventTypesEnum.INFO;
+  game_name: string;
 }
 
 export interface FollowEvent {
@@ -46,4 +53,4 @@ export interface RaidEvent {
   viewers: number;
 }
 
-export type SubscriptionEvent = FollowEvent | SubEvent | GiftEvent | RaidEvent;
+export type SubscriptionEvent = InfoEvent | FollowEvent | SubEvent | GiftEvent | RaidEvent;

@@ -7,12 +7,14 @@ import { EventTypes } from "api";
 export default {
   data() {
     return {
+      currentGame: "",
       followEvent: {},
       isDev: isDev,
     };
   },
   provide() {
     return {
+      currentGame: computed(() => this.currentGame),
       followEvent: computed(() => this.followEvent),
     };
   },
@@ -22,6 +24,10 @@ export default {
       query: { user: this.$route.params.user },
     });
 
+    socket.on(EventTypes.INFO, (event) => {
+      console.log("Info event: ", event);
+      this.currentGame = event.game_name;
+    });
     socket.on(EventTypes.FOLLOW, (event) => {
       if (!document.hidden) {
         console.log("Follow event: ", event);

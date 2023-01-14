@@ -164,3 +164,13 @@ export async function getOrSubscribeToType(broadcasterUserId: string, type: Even
   }
   return subscriptions;
 }
+
+export async function getGame(broadcasterUserId: string) {
+  try {
+    const { data } = await axios.get("/streams", { params: { user_id: broadcasterUserId, first: 1 } });
+    return data.data[0].game_name;
+  } catch (err) {
+    logError(err);
+    return "";
+  }
+}

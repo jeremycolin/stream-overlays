@@ -1,7 +1,7 @@
 import { EventTypesEnum, SubscriptionEvent } from "api";
 import { Server, Socket } from "socket.io";
 import { cleanBroadCasterSubscriptions, getBroadcasterSubscriptions, setBroadcasterSubscriptions } from "../events/broadcast";
-import { deleteSubscription, getUserInfo, getOrSubscribeToType } from "../apis/twitch";
+import { deleteSubscription, getUserInfo, getOrSubscribeToType, getGame } from "../apis/twitch";
 
 export const socketMiddleWare = (io: Server) => {
   const emitToRoom = (broadcasterUserId: string, eventType: EventTypesEnum, event: SubscriptionEvent) => {
@@ -31,6 +31,9 @@ export const socketMiddleWare = (io: Server) => {
         console.debug("Emitting event: ", event);
         emitToRoom(broadcasterUserId, event.type, event);
       });
+
+      const game_name = await getGame(broadcasterUserId);
+      emitToRoom(broadcasterUserId, EventTypesEnum.INFO, { type: EventTypesEnum.INFO, game_name });
     }
   });
 
@@ -58,6 +61,11 @@ export const socketMiddleWare = (io: Server) => {
 
   return async (socket: Socket) => {
     const user = socket.handshake.query.user as string;
+    if (!user || user === "undefined") {
+      console.warn(`invalid user, disconnecting socket`);
+      socket.disconnect();
+      return;
+    }
     console.log(`${user} connected`);
 
     const broadcasterInfo = await getUserInfo(user);
