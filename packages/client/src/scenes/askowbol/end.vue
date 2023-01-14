@@ -10,10 +10,6 @@ import backgroundUrl from "@/assets/background-end.mp4";
 
 import { addToPixiLoader } from "@/utils.js";
 
-import GUI from "lil-gui";
-
-const gui = new GUI();
-
 const frame = [
   {
     path: [
@@ -146,24 +142,6 @@ export default {
     });
 
     stage.addChild(graphics);
-
-    // ui to adjust scene
-    if (isDev) {
-      const tiltShiftFolder = gui.addFolder("tiltShift");
-      tiltShiftFolder.add(filterTiltShift, "blur", 0, 200);
-      tiltShiftFolder.add(filterTiltShift, "radientBlur", 0, 1000);
-      tiltShiftFolder.add(startPoint, "x");
-      tiltShiftFolder.add(startPoint, "y");
-      tiltShiftFolder.add(endPoint, "x");
-      tiltShiftFolder.add(endPoint, "y");
-
-      const filtderAdjustementFolder = gui.addFolder("filtderAdjustement");
-      filtderAdjustementFolder.add(filterAdjustment, "brightness", 0, 2);
-
-      const textFolder = gui.addFolder("text");
-      textFolder.add(byeText, "x", 0, 1920);
-      textFolder.add(byeText, "y", 0, 1080);
-    }
   },
 };
 </script>
