@@ -104,6 +104,7 @@ export default {
 
 <style lang="scss">
 .follow-valheim {
+  font-family: "Skranji", cursive;
   width: 100%;
   height: 100%;
 
@@ -123,21 +124,17 @@ export default {
     width: 100%;
     height: 100%;
     text-align: center;
-    /* Created with https://www.css-gradient.com */
     background: #000000;
-    background: radial-gradient(ellipse farthest-side at center center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 35%, #ffffff00 66%);
+    background: radial-gradient(ellipse farthest-side at center center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 35%, #ffffff00 65%);
   }
 
   &__content {
-    font-family: "Skranji", cursive;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
     width: 35%;
-    margin: auto;
-    // text-transform: uppercase;
     color: #c74d47;
     font-size: 24px;
     -webkit-text-stroke: 1px #000;
