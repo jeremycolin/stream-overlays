@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { io } from "socket.io-client";
-import { EventTypes } from "api";
+import { EventTypes, TWITCH_GAMES } from "api";
 import FollowManager from "@/alerts/follow/manager.vue";
 
 export default {
@@ -29,7 +29,7 @@ export default {
 
     socket.on(EventTypes.INFO, (event) => {
       console.log("Info event: ", event);
-      this.game = event.game_name;
+      this.game = TWITCH_GAMES[event.game_name];
     });
     socket.on(EventTypes.FOLLOW, (event) => {
       if (!document.hidden) {

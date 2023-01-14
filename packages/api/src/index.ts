@@ -54,3 +54,5 @@ export interface RaidEvent {
 }
 
 export type SubscriptionEvent = InfoEvent | FollowEvent | SubEvent | GiftEvent | RaidEvent;
+
+export { TWITCH_GAMES } from "./twitch-games";

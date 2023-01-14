@@ -33,7 +33,7 @@ export const socketMiddleWare = (io: Server) => {
       });
     }
 
-    const game_name = (await getGame(broadcasterUserId)) || "valheim";
+    const game_name = await getGame(broadcasterUserId);
     if (game_name) {
       emitToRoom(broadcasterUserId, EventTypesEnum.INFO, { type: EventTypesEnum.INFO, game_name });
     }
