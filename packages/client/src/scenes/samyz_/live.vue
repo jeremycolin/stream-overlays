@@ -1,11 +1,6 @@
 <script>
-import followFilou from "@/alerts/followFilou.vue";
-
 export default {
   name: "liveScene",
-  components: {
-    followFilou,
-  },
   mounted() {
     console.log("Scene -> Samyz live");
   },
@@ -13,9 +8,7 @@ export default {
 </script>
 
 <template>
-  <div class="live-scene">
-    <followFilou></followFilou>
-  </div>
+  <div class="live-scene"></div>
 </template>
 
 <style lang="scss">

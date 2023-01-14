@@ -1,11 +1,6 @@
 <script>
-import followFilou from "@/alerts/followFilou.vue";
-
 export default {
   name: "endScene",
-  components: {
-    followFilou,
-  },
   mounted() {
     console.log("Scene -> Default End");
   },
@@ -13,9 +8,7 @@ export default {
 </script>
 
 <template>
-  <div class="end-scene">
-    <followFilou></followFilou>
-  </div>
+  <div class="end-scene"></div>
 </template>
 
 <style lang="scss">

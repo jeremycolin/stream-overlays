@@ -1,6 +1,4 @@
 <script>
-import followSoT from "@/alerts/followSoT.vue";
-
 import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
@@ -61,9 +59,6 @@ const scene = {
 
 export default {
   name: "endScene",
-  components: {
-    followSoT,
-  },
   async mounted() {
     console.log("Scene -> Askowbol End");
 
@@ -147,9 +142,7 @@ export default {
 </script>
 
 <template>
-  <div class="end-scene">
-    <followSoT></followSoT>
-  </div>
+  <div class="end-scene"></div>
 </template>
 
 <style lang="scss">

@@ -70,7 +70,7 @@ function logErrorToDiscord(content: string) {
 
 export function logError(err: any) {
   try {
-    console.error(err.response);
+    console.error(err);
   } catch (unknownErr) {
     console.error("something went really wrong: ", unknownErr);
   }
@@ -169,6 +169,9 @@ export async function getOrSubscribeToType(broadcasterUserId: string, type: Even
 export async function getGame(broadcasterUserId: string) {
   try {
     const { data } = await axios.get("/streams", { params: { user_id: broadcasterUserId, first: 1 } });
+    if (!data.data.length) {
+      return "";
+    }
     return data.data[0].game_name;
   } catch (err) {
     logError(err);

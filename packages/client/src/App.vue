@@ -3,18 +3,21 @@ import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { io } from "socket.io-client";
 import { EventTypes } from "api";
+import FollowManager from "@/alerts/follow/manager.vue";
 
 export default {
+  components: {
+    FollowManager,
+  },
   data() {
     return {
-      currentGame: "",
       followEvent: {},
       isDev: isDev,
+      game: "",
     };
   },
   provide() {
     return {
-      currentGame: computed(() => this.currentGame),
       followEvent: computed(() => this.followEvent),
     };
   },
@@ -26,7 +29,7 @@ export default {
 
     socket.on(EventTypes.INFO, (event) => {
       console.log("Info event: ", event);
-      this.currentGame = event.game_name;
+      this.game = event.game_name;
     });
     socket.on(EventTypes.FOLLOW, (event) => {
       if (!document.hidden) {
@@ -43,6 +46,7 @@ export default {
 <template>
   <div class="stream-overlay" :class="{ 'is-dev': isDev }">
     <router-view></router-view>
+    <FollowManager :game="game" />
   </div>
 </template>
 

@@ -1,11 +1,6 @@
 <script>
-import followCode from "@/alerts/followCode.vue";
-
 export default {
   name: "liveScene",
-  components: {
-    followCode,
-  },
   mounted() {
     console.log("Scene -> Default Live");
   },
@@ -13,9 +8,7 @@ export default {
 </script>
 
 <template>
-  <div class="live-scene">
-    <followCode></followCode>
-  </div>
+  <div class="live-scene"></div>
 </template>
 
 <style lang="scss">

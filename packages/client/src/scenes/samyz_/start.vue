@@ -1,6 +1,4 @@
 <script>
-import followCode from "@/alerts/followCode.vue";
-
 import * as PIXI from "pixi.js";
 import { CRTFilter, RGBSplitFilter, GlitchFilter } from "pixi-filters";
 import backgroundUrl from "@/assets/background-code.png";
@@ -18,9 +16,6 @@ let filterGlitch;
 let text;
 export default {
   name: "startScene",
-  components: {
-    followCode,
-  },
   mounted() {
     console.log("Scene -> Samyz_ Start");
     app = new PIXI.Application({
@@ -106,9 +101,7 @@ export default {
 </script>
 
 <template>
-  <div class="start-scene">
-    <followCode></followCode>
-  </div>
+  <div class="start-scene"></div>
 </template>
 
 <style lang="scss">

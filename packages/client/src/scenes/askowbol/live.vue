@@ -1,11 +1,6 @@
 <script>
-import followValheim from "@/alerts/followValheim.vue";
-
 export default {
   name: "liveScene",
-  components: {
-    followValheim,
-  },
   mounted() {
     console.log("Scene -> Askowbol live");
   },
@@ -13,9 +8,7 @@ export default {
 </script>
 
 <template>
-  <div class="live-scene">
-    <followValheim></followValheim>
-  </div>
+  <div class="live-scene"></div>
 </template>
 
 <style lang="scss">

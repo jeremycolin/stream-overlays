@@ -33,8 +33,10 @@ export const socketMiddleWare = (io: Server) => {
       });
     }
 
-    const game_name = await getGame(broadcasterUserId);
-    emitToRoom(broadcasterUserId, EventTypesEnum.INFO, { type: EventTypesEnum.INFO, game_name });
+    const game_name = (await getGame(broadcasterUserId)) || "valheim";
+    if (game_name) {
+      emitToRoom(broadcasterUserId, EventTypesEnum.INFO, { type: EventTypesEnum.INFO, game_name });
+    }
   });
 
   io.of("/").adapter.on("leave-room", (broadcasterUserId, socketId) => {

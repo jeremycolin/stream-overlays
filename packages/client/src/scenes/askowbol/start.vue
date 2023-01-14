@@ -1,6 +1,4 @@
 <script>
-import followFilou from "@/alerts/followFilou.vue";
-
 import * as PIXI from "pixi.js";
 import backgroundUrl from "@/assets/background-askowbol.jpg";
 import { MotionBlurFilter, DropShadowFilter } from "pixi-filters";
@@ -27,9 +25,6 @@ let tl;
 
 export default {
   name: "startScene",
-  components: {
-    followFilou,
-  },
   async mounted() {
     console.log("Scene -> Start");
 
@@ -160,9 +155,7 @@ export default {
 </script>
 
 <template>
-  <div class="start-scene">
-    <followFilou></followFilou>
-  </div>
+  <div class="start-scene"></div>
 </template>
 
 <style lang="scss">
