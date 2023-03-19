@@ -63,3 +63,5 @@ For `askowbol`: `https://stream-overlays-production.up.railway.app/askowbol/live
 ```
 ./twitch event trigger follow -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --to-user 44105925
 ```
+
+Launch stream
