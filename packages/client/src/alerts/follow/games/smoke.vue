@@ -9,7 +9,7 @@ import backgroundUrl from "@/assets/background-askowbol.jpg";
 import maskUrl from "@/assets/mask/smoke-1.mp4";
 import maskImageUrl from "@/assets/mask/mask.jpg";
 
-import { addToPixiLoader } from "@/utils.js";
+import { addToPixiLoader } from "@/lib/utils";
 
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);

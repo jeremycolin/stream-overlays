@@ -9,9 +9,16 @@ export default defineConfig({
     port: 5000,
   },
   define: {
-    isDev: process.env.NODE_ENV !== "production",
+    IS_DEV: process.env.NODE_ENV !== "production",
+    APP_CLIENT_ID: JSON.stringify("fvetqbhasvewapnb7glpbqw8ic4im0"),
+    TWITCH_OAUTH_REDIRECT_URL: JSON.stringify(
+      process.env.NODE_ENV === "production" ? "https://stream-overlays-production.up.railway.app/oauth" : "http://localhost:5000/oauth"
+    ),
     __WEBSOCKET_ENDPOINT__: JSON.stringify(
       process.env.NODE_ENV === "production" ? "wss://stream-overlays-production.up.railway.app/" : "ws://localhost:3000/"
+    ),
+    __SERVER_ENDPOINT__: JSON.stringify(
+      process.env.NODE_ENV === "production" ? "https://stream-overlays-production.up.railway.app" : "http://localhost:3000"
     ),
   },
   resolve: {

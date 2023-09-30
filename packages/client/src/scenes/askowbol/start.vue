@@ -5,7 +5,7 @@ import { MotionBlurFilter, DropShadowFilter } from "pixi-filters";
 import { gsap } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
 
-import { addToPixiLoader } from "@/utils.js";
+import { addToPixiLoader } from "@/lib/utils";
 
 gsap.registerPlugin(PixiPlugin);
 
@@ -26,7 +26,7 @@ let tl;
 export default {
   name: "startScene",
   async mounted() {
-    console.log("Scene -> Start");
+    console.log("Scene -> Askowbol Start");
 
     app = new PIXI.Application({
       width: 1920,

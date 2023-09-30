@@ -9,7 +9,7 @@ import followSoundThree from "@/assets/sounds/sot3.ogg";
 import followSoundFour from "@/assets/sounds/sot4.ogg";
 import followSoundFive from "@/assets/sounds/sot5.ogg";
 
-import { addToPixiLoader } from "@/utils.js";
+import { addToPixiLoader } from "@/lib/utils";
 
 PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 gsap.registerPlugin(PixiPlugin);

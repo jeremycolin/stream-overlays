@@ -81,7 +81,7 @@ export interface TwitchSubscription {
   status: "webhook_callback_verification_pending" | "webhook_callback_verification_failed";
   type: EventTypesEnum;
   version: "1";
-  condition: { broadcaster_user_id: string; to_broadcaster_user_id: string }; // either one of the other but handling type guard here is annoying
+  condition: { broadcaster_user_id: string; to_broadcaster_user_id: string; moderator_user_id: string }; // either one of the other but handling type guard here is annoying
   created_at: string;
   transport: {
     method: "webhook";
@@ -128,13 +128,23 @@ export async function getSubscriptionsByType(broadcasterUserId: string, type: Ev
 
 export async function subscribeToType(broadcasterUserId: string, type: EventTypesEnum): Promise<Array<TwitchSubscription>> {
   try {
+    let version = "1";
+    let condition: { broadcaster_user_id?: string; to_broadcaster_user_id?: string; moderator_user_id?: string } = {
+      broadcaster_user_id: broadcasterUserId,
+    };
+    if (type === EventTypesEnum.FOLLOW) {
+      version = "2";
+      condition = { ...condition, moderator_user_id: broadcasterUserId };
+    } else if (type === EventTypesEnum.RAID) {
+      condition = { to_broadcaster_user_id: broadcasterUserId };
+    }
+
     const { data } = (await axios.post(
       "/eventsub/subscriptions",
       {
         type,
-        version: "1",
-        condition:
-          type === EventTypesEnum.RAID ? { to_broadcaster_user_id: broadcasterUserId } : { broadcaster_user_id: broadcasterUserId },
+        version,
+        condition,
         transport: { method: "webhook", callback: SUBSCRIPTION_CALLBACK, secret: TWITCH_CLIENT_SECRET },
       },
       {

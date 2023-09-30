@@ -2,7 +2,7 @@
 export default {
   name: "liveScene",
   mounted() {
-    console.log("Scene -> Samyz live");
+    console.log("Scene -> Samyz_ live");
   },
 };
 </script>

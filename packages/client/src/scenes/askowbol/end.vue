@@ -6,7 +6,7 @@ import { AdjustmentFilter, TiltShiftFilter, DropShadowFilter } from "pixi-filter
 
 import backgroundUrl from "@/assets/background-end.mp4";
 
-import { addToPixiLoader } from "@/utils.js";
+import { addToPixiLoader } from "@/lib/utils";
 
 const frame = [
   {
