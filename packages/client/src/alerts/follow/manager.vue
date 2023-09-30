@@ -1,7 +1,3 @@
-<template>
-  <div class="follow-overlay"><component :is="follow()" /></div>
-</template>
-
 <script>
 import { defineComponent, defineAsyncComponent } from "vue";
 
@@ -27,6 +23,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<template>
+  <div class="follow-overlay"><component :is="follow()" /></div>
+</template>
 
 <style lang="scss">
 .follow-overlay {

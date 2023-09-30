@@ -1,7 +1,9 @@
-import { EventTypesEnum, SubscriptionEvent } from "api";
+import { EventTypesEnum, OauthTypesEnum, SubscriptionEvent } from "api";
 import { Server, Socket } from "socket.io";
 import { cleanBroadCasterSubscriptions, getBroadcasterSubscriptions, setBroadcasterSubscriptions } from "../events/broadcast";
 import { deleteSubscription, getUserInfo, getOrSubscribeToType, getGame } from "../apis/twitch";
+import { OAuthTokenMemory } from "../apis/oauth-token-memory";
+import { getUserOauthTokens, validateUserOauthToken } from "../apis/oauth-twitch";
 
 export const socketMiddleWare = (io: Server) => {
   const emitToRoom = (broadcasterUserId: string, eventType: EventTypesEnum, event: SubscriptionEvent) => {
@@ -68,16 +70,42 @@ export const socketMiddleWare = (io: Server) => {
       socket.disconnect();
       return;
     }
-    console.log(`${user} connected`);
+    console.log(`${user} connected.`);
 
     const broadcasterInfo = await getUserInfo(user);
     if (!broadcasterInfo) {
-      console.warn(`${user} not found, disconnecting socket`);
+      console.warn(`${user} (username) not found on Twitch, disconnecting socket`);
       socket.disconnect();
       return;
     }
-    console.log("broadcasterUserId:", broadcasterInfo.id);
 
+    console.log("User broadcaster ID is: ", broadcasterInfo.id);
+    console.log("Now checking if user has a valid token in server memory");
+
+    if (!OAuthTokenMemory.hasTokens(broadcasterInfo.id)) {
+      console.log("User does not have a token in server memory, starting client oAuth flow");
+      socket.emit(OauthTypesEnum.OAUTH_START);
+      return;
+    } else {
+      console.log("User has a token in server memory, now validating the token with the Twitch API");
+      const { access_token, refresh_token } = OAuthTokenMemory.getTokens(broadcasterInfo.id);
+      const tokenInfo = await validateUserOauthToken({ access_token });
+
+      if (!tokenInfo) {
+        console.warn("User token validation failed, starting client oAuth flow");
+        socket.emit(OauthTypesEnum.OAUTH_START);
+        return;
+      }
+
+      // in practice this should never happen as we are fetching token from broadcasterInfo.id
+      if (tokenInfo.user_id !== broadcasterInfo.id) {
+        console.error("User trying to connect with a token that does not belong to him, starting client oAuth flow");
+        socket.emit(OauthTypesEnum.OAUTH_START);
+        return;
+      }
+    }
+
+    socket.emit(OauthTypesEnum.OAUTH_SUCCESS);
     socket.join(broadcasterInfo.id); // join the broadcaster room
 
     socket.on("disconnect", () => {

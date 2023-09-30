@@ -14,6 +14,16 @@ export const enum EventTypesEnum {
   RAID = "channel.raid",
 }
 
+export const OauthTypes = Object.freeze({
+  OAUTH_START: "oauth.start",
+  OAUTH_SUCCESS: "oauth.success",
+});
+
+export const enum OauthTypesEnum {
+  OAUTH_START = "oauth.start",
+  OAUTH_SUCCESS = "oauth.success",
+}
+
 export interface InfoEvent {
   type: EventTypesEnum.INFO;
   game_name: string;

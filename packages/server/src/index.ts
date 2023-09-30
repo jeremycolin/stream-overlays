@@ -1,14 +1,16 @@
 import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
+import cors from "cors";
 import { Server } from "socket.io";
 import compression from "compression";
 import helmet from "helmet";
 import { resolve } from "path";
 import { config, isDev } from "./config";
-import { twitchEventSubMessageTypeMiddleWare, twitchEventSubValidationMiddleWare } from "./middleware/twitch-eventsub";
-import { socketMiddleWare } from "./middleware/socket";
+import { twitchEventSubMessageTypeMiddleWare, twitchEventSubValidationMiddleWare } from "./middlewares/twitch-eventsub";
+import { socketMiddleWare } from "./middlewares/socket";
 import "./health";
+import { oAuthTokenMiddleWare } from "./middlewares/oauth-token";
 
 const app = express();
 
@@ -35,18 +37,23 @@ app.use(
   })
 );
 
-app.get("/hello", (req, res) => {
-  res.status(200).send("Hello World, yay Railway!");
-});
-app.post("/eventsub", [twitchEventSubValidationMiddleWare, twitchEventSubMessageTypeMiddleWare]);
-
 if (!isDev) {
   // in production we also serve static assets through express
   app.use(express.static(config.ASSETS_PATH));
   app.get("*", (req, res) => {
     res.sendFile(resolve(config.ASSETS_PATH, "index.html"));
   });
+} else {
+  app.use(cors());
 }
+
+app.get("/hello", (req, res) => {
+  res.status(200).send("Hello World, yay Railway!");
+});
+
+app.post("/oauth-token", oAuthTokenMiddleWare);
+
+app.post("/eventsub", [twitchEventSubValidationMiddleWare, twitchEventSubMessageTypeMiddleWare]);
 
 const server = createServer(app);
 const io = new Server(
