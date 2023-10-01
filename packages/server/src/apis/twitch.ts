@@ -1,7 +1,7 @@
 import { EventTypesEnum } from "api";
 import axiosModule from "axios";
 import { isDev } from "../config";
-import { getAccessToken } from "./oauth-twitch";
+import { refreshAppAccessToken } from "./oauth-twitch";
 
 let TWITCH_API_TOKEN = process.env.TWITCH_API_TOKEN!;
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID!;
@@ -28,7 +28,7 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 401) {
       console.log("Twitch access token expired, refreshing");
-      const twitchApiToken = await getAccessToken();
+      const twitchApiToken = await refreshAppAccessToken();
       if (twitchApiToken) {
         // logErrorToDiscord("Twitch access token expired, refreshing token was successful :)");
         console.log("refreshing token was successful :)");

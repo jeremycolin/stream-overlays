@@ -89,7 +89,7 @@ export const socketMiddleWare = (io: Server) => {
     } else {
       console.log("User has a token in server memory, now validating the token with the Twitch API");
       const { access_token, refresh_token } = OAuthTokenMemory.getTokens(broadcasterInfo.id);
-      const tokenInfo = await validateUserOauthToken({ access_token });
+      const tokenInfo = await validateUserOauthToken({ access_token, refresh_token, user_id: broadcasterInfo.id });
 
       if (!tokenInfo) {
         console.warn("User token validation failed, starting client oAuth flow");

@@ -1,6 +1,7 @@
-import axiosModule from "axios";
+import axiosModule, { AxiosError } from "axios";
 import { logError } from "./twitch";
 import { URLSearchParams } from "url";
+import { OAuthTokenMemory } from "./oauth-token-memory";
 
 const TWITCH_OAUTH2_ENDPOINT = "https://id.twitch.tv/oauth2";
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID!;
@@ -14,7 +15,30 @@ const axios = axiosModule.create({
   },
 });
 
-export async function getAccessToken() {
+async function refreshOauthTokens({ user_id, refresh_token }: { user_id: string; refresh_token: string }) {
+  try {
+    const params = new URLSearchParams({
+      client_id: TWITCH_CLIENT_ID,
+      client_secret: TWITCH_CLIENT_SECRET,
+      grant_type: "refresh_token",
+      refresh_token,
+    });
+
+    const { data } = (await axios.post("/token", params.toString(), {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    })) as { data: { access_token: string; refresh_token: string; expires_in: number } };
+    console.error("Successfully refreshed user oauth tokens, updating tokens in server memory");
+    OAuthTokenMemory.setTokens(user_id, data);
+    return { ...data, user_id };
+  } catch (err) {
+    console.error("Failed to refresh user oauth tokens");
+    logError(err);
+  }
+}
+
+export async function refreshAppAccessToken() {
   try {
     const params = new URLSearchParams({
       client_id: TWITCH_CLIENT_ID,
@@ -52,7 +76,15 @@ export async function getUserOauthTokens({ code }: { code: string }) {
   }
 }
 
-export async function validateUserOauthToken({ access_token }: { access_token: string }) {
+export async function validateUserOauthToken({
+  access_token,
+  refresh_token,
+  user_id,
+}: {
+  access_token: string;
+  refresh_token?: string;
+  user_id?: string;
+}) {
   try {
     const { data } = (await axios.get("/validate", {
       headers: {
@@ -60,7 +92,12 @@ export async function validateUserOauthToken({ access_token }: { access_token: s
       },
     })) as { data: { user_id: string; scopes: string[] } };
     return data;
-  } catch (err) {
+  } catch (err: any) {
+    if (user_id && refresh_token && err instanceof AxiosError && err.response?.status === 401) {
+      console.log("User oauth access token expired, refreshing tokens");
+      const twitchApiToken = await refreshOauthTokens({ refresh_token, user_id });
+      return twitchApiToken;
+    }
     logError(err);
   }
 }
