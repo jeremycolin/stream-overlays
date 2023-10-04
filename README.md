@@ -14,6 +14,7 @@ Create a file `packages/server/.env` file containing the values for the followin
 TWITCH_CLIENT_ID=YOUR_CLIENT_ID
 TWITCH_CLIENT_SECRET=YOUR_DARKEST_SECRET
 TWITCH_API_TOKEN=YOUR_API_TOKEN
+TWITCH_OAUTH_REDIRECT_URL=http://localhost:5000/oauth
 ```
 
 ### Install project
