@@ -8,7 +8,7 @@ yarn install
 
 #### Environment variables
 
-Create a file `packages/server/.env` file containing the values for the following environment variables:
+Create a file `packages/.env` file containing the values for the following environment variables:
 
 ```
 TWITCH_CLIENT_ID=YOUR_CLIENT_ID

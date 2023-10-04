@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config({ path: '../.env' });
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
@@ -10,7 +12,7 @@ export default defineConfig({
   },
   define: {
     IS_DEV: process.env.NODE_ENV !== "production",
-    APP_CLIENT_ID: JSON.stringify("fvetqbhasvewapnb7glpbqw8ic4im0"),
+    APP_CLIENT_ID: JSON.stringify(process.env.TWITCH_CLIENT_ID),
     TWITCH_OAUTH_REDIRECT_URL: JSON.stringify(
       process.env.NODE_ENV === "production" ? "https://stream-overlays-production.up.railway.app/oauth" : "http://localhost:5000/oauth"
     ),
