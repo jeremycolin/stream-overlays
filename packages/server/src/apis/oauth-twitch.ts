@@ -92,7 +92,7 @@ export async function validateUserOauthToken({
       },
     })) as { data: { user_id: string; scopes: string[] } };
     return data;
-  } catch (err: any) {
+  } catch (err: unknown) {
     if (user_id && refresh_token && err instanceof AxiosError && err.response?.status === 401) {
       console.log("User oauth access token expired, refreshing tokens");
       const twitchApiToken = await refreshOauthTokens({ refresh_token, user_id });
