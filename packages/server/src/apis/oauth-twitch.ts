@@ -29,7 +29,7 @@ async function refreshOauthTokens({ user_id, refresh_token }: { user_id: string;
         "Content-Type": "application/x-www-form-urlencoded",
       },
     })) as { data: { access_token: string; refresh_token: string; expires_in: number } };
-    console.error("Successfully refreshed user oauth tokens, updating tokens in server memory");
+    console.log("Successfully refreshed user oauth tokens, updating tokens in server memory");
     OAuthTokenMemory.setTokens(user_id, data);
     return { ...data, user_id };
   } catch (err) {
