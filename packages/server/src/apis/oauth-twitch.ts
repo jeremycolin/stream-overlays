@@ -1,7 +1,7 @@
 import axiosModule, { AxiosError } from "axios";
 import { logError } from "./twitch";
 import { URLSearchParams } from "url";
-import { OAuthTokenMemory } from "./oauth-token-memory";
+import { oAuthTokensPersistentStorage } from "../database/tokens";
 
 const TWITCH_OAUTH2_ENDPOINT = "https://id.twitch.tv/oauth2";
 const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID!;
@@ -29,8 +29,8 @@ async function refreshOauthTokens({ user_id, refresh_token }: { user_id: string;
         "Content-Type": "application/x-www-form-urlencoded",
       },
     })) as { data: { access_token: string; refresh_token: string; expires_in: number } };
-    console.log("Successfully refreshed user oauth tokens, updating tokens in server memory");
-    OAuthTokenMemory.setTokens(user_id, data);
+    console.log("Successfully refreshed user oauth tokens, updating tokens in db");
+    await oAuthTokensPersistentStorage.setTokens(user_id, data);
     return { ...data, user_id };
   } catch (err) {
     console.error("Failed to refresh user oauth tokens");

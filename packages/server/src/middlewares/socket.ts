@@ -2,8 +2,8 @@ import { EventTypesEnum, OauthTypesEnum, SubscriptionEvent } from "api";
 import { Server, Socket } from "socket.io";
 import { cleanBroadCasterSubscriptions, getBroadcasterSubscriptions, setBroadcasterSubscriptions } from "../events/broadcast";
 import { deleteSubscription, getUserInfo, getOrSubscribeToType, getGame } from "../apis/twitch";
-import { OAuthTokenMemory } from "../apis/oauth-token-memory";
-import { getUserOauthTokens, validateUserOauthToken } from "../apis/oauth-twitch";
+import { oAuthTokensPersistentStorage } from "../database/tokens";
+import { validateUserOauthToken } from "../apis/oauth-twitch";
 
 export const socketMiddleWare = (io: Server) => {
   const emitToRoom = (broadcasterUserId: string, eventType: EventTypesEnum, event: SubscriptionEvent) => {
@@ -80,15 +80,23 @@ export const socketMiddleWare = (io: Server) => {
     }
 
     console.log("User broadcaster ID is: ", broadcasterInfo.id);
-    console.log("Now checking if user has a valid token in server memory");
+    console.log("Now checking if user has a valid token in db");
 
-    if (!OAuthTokenMemory.hasTokens(broadcasterInfo.id)) {
-      console.log("User does not have a token in server memory, starting client oAuth flow");
+    const hasTokens = await oAuthTokensPersistentStorage.hasTokens(broadcasterInfo.id);
+
+    if (!hasTokens) {
+      console.log("User does not have a token in db, starting client oAuth flow");
       socket.emit(OauthTypesEnum.OAUTH_START);
       return;
     } else {
-      console.log("User has a token in server memory, now validating the token with the Twitch API");
-      const { access_token, refresh_token } = OAuthTokenMemory.getTokens(broadcasterInfo.id);
+      console.log("User has a token in db, now validating the token with the Twitch API");
+      const tokens = await oAuthTokensPersistentStorage.getTokens(broadcasterInfo.id);
+      if (!tokens) {
+        console.warn("Unable to retrieve tokens from database");
+        socket.emit(OauthTypesEnum.OAUTH_START);
+        return;
+      }
+      const { access_token, refresh_token } = tokens;
       const tokenInfo = await validateUserOauthToken({ access_token, refresh_token, user_id: broadcasterInfo.id });
 
       if (!tokenInfo) {
