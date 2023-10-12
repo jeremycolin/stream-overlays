@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { getUserOauthTokens, validateUserOauthToken } from "../apis/oauth-twitch";
-import { OAuthTokenMemory } from "../apis/oauth-token-memory";
+import { oAuthTokensPersistentStorage } from "../database/tokens";
 
 export async function oAuthTokenMiddleWare(req: Request, res: Response, next: NextFunction) {
   console.log("Received oAuth code from client, now validating the code with the Twitch API");
@@ -21,8 +21,8 @@ export async function oAuthTokenMiddleWare(req: Request, res: Response, next: Ne
       return;
     }
 
-    console.log(`Saving token for user_id ${tokenData.user_id} in server memory`);
-    OAuthTokenMemory.setTokens(tokenData.user_id, tokens);
+    console.log(`Saving token for user_id ${tokenData.user_id} in db`);
+    await oAuthTokensPersistentStorage.setTokens(tokenData.user_id, tokens);
   } catch (err) {
     console.error(err);
   }
