@@ -23,8 +23,8 @@ export const socketMiddleWare = (io: Server) => {
       const subscriptions = (
         await Promise.all([
           getOrSubscribeToType(broadcasterUserId, EventTypesEnum.FOLLOW),
-          // getOrSubscribeToType(broadcasterUserId, EventTypesEnum.SUBSCRIBE), // needs broadcaster oauth
-          // getOrSubscribeToType(broadcasterUserId, EventTypesEnum.GIFT), // needs broadcaster oauth
+          getOrSubscribeToType(broadcasterUserId, EventTypesEnum.SUBSCRIBE),
+          // getOrSubscribeToType(broadcasterUserId, EventTypesEnum.GIFT),
           // getOrSubscribeToType(broadcasterUserId, EventTypesEnum.RAID), // works but useless for now
         ])
       ).flat();
