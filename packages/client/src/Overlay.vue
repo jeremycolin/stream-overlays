@@ -64,7 +64,7 @@ export default {
         redirect_uri: TWITCH_OAUTH_REDIRECT_URL,
         client_id: APP_CLIENT_ID,
         response_type: "code",
-        scope: encodeURI("moderator:read:followers"),
+        scope: "moderator:read:followers channel:read:subscriptions",
         state,
       });
       window.location.href = `https://id.twitch.tv/oauth2/authorize?${params.toString()}`;
