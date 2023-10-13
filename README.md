@@ -48,6 +48,7 @@ In psql:
 ```sql
 CREATE USER local_user WITH PASSWORD 'local_password';
 GRANT CREATE ON SCHEMA public TO local_user;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 ```
 
 ### Install project
