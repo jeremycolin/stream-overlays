@@ -26,4 +26,8 @@ body,
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.generic-background {
+  background-image: radial-gradient(farthest-corner circle at 100% 0%, #00dfff 0%, #8c00ea 100%);
+}
 </style>
