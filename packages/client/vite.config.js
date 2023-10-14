@@ -1,17 +1,18 @@
-import dotenv from "dotenv";
-
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
-
+import { fileURLToPath } from "url";
+import path from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import path from "path";
+import glsl from "vite-plugin-glsl";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), glsl()],
   server: {
     port: 5000,
   },
+  envDir: path.resolve(dirname, "../../"),
   define: {
     IS_DEV: process.env.NODE_ENV !== "production",
     APP_CLIENT_ID: JSON.stringify(process.env.TWITCH_CLIENT_ID),
@@ -25,8 +26,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "/src"),
-      "~@": path.resolve(__dirname, "/src"),
+      "@": path.resolve(dirname, "/src"),
+      "~@": path.resolve(dirname, "/src"),
     },
   },
 });
