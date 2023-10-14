@@ -1,5 +1,5 @@
 <script>
-import Experience from "experiences/Home/Experience.js";
+import Experience from "/src/experiences/Home/Experience.js";
 
 export default {
   name: "app-home",
