@@ -15,6 +15,8 @@
     "pixi-webfont-loader": "^1.0.2",
     "pixi.js": "^6.2.2",
     "socket.io-client": "^4.4.1",
+    "stats.js": "^0.17.0",
+    "three": "^0.157.0",
     "vue": "^3.2.25",
     "vue-router": "4"
   },
