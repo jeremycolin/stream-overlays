@@ -1,17 +1,19 @@
 <script>
-import AppTitle from "@/components/title.vue";
+import Experience from "experiences/Home/Experience.js";
 
 export default {
   name: "app-home",
-  components: {
-    AppTitle,
+  mounted() {
+    const experience = new Experience(this.$refs.canvas);
   },
 };
 </script>
 
 <template>
   <div class="home generic-background">
-    <app-title></app-title>
+    <canvas ref="canvas" class="webgl"></canvas>
+    <span class="title title-front">Stream Overlay</span>
+    <span class="title title-back">Stream Overlay</span>
     <footer>
       <ul>
         <li><a href="https://github.com/jeremycolin/stream-overlays">code</a></li>
@@ -27,6 +29,42 @@ export default {
   width: 100%;
   height: 100%;
   color: #ffffff;
+
+  .webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+    z-index: 10;
+  }
+
+  .title {
+    position: absolute;
+    top: 50%;
+    left: 2vw;
+    right: 2vw;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    font-size: 8vw;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 0.55vw;
+  }
+
+  .title-front {
+    z-index: 20;
+    -moz-text-stroke-color: rgba(255, 255, 255, 0.5);
+    -webkit-text-stroke-color: rgba(255, 255, 255, 0.5);
+    -moz-text-stroke-width: 0.085vw;
+    -webkit-text-stroke-width: 0.085vw;
+    -moz-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .title-back {
+    z-index: 1;
+  }
 
   footer {
     width: 100%;

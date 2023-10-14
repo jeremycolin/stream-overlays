@@ -16,24 +16,22 @@ export default {
 </template>
 
 <style lang="scss">
-h1 {
+h1.app-title {
   position: absolute;
   color: white;
+  width: 280px;
+  height: 50px;
   top: 0;
   left: 0;
 }
 
-.app-title {
-  width: 280px;
-  height: 50px;
-}
 @supports (backdrop-filter: blur(12px)) {
   .visually-hidden {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
-  h1 {
+  h1.app-title {
     backdrop-filter: blur(12px);
     background: rgba(white, 0.2);
     clip-path: url(#lockup-title-mask-path);
