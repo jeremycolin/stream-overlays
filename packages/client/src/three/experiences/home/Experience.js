@@ -9,7 +9,7 @@ import Stats from "@/three/utils/Stats.js";
 import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
 
-import World from "./World/World.js";
+import World from "./world/World.js";
 
 import sources from "./sources.js";
 
