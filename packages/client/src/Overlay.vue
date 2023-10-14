@@ -74,13 +74,13 @@ export default {
 </script>
 
 <template>
-  <div v-if="state === 'loading'" class="auth">
+  <div v-if="state === 'loading'" class="auth generic-background">
     <app-title></app-title>
     <div class="card">
       <div class="text-info">Loading..</div>
     </div>
   </div>
-  <div v-else-if="state === 'oauth:start'" class="auth">
+  <div v-else-if="state === 'oauth:start'" class="auth generic-background">
     <app-title></app-title>
     <div class="card">
       <div class="text-info">
@@ -105,7 +105,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: radial-gradient(farthest-corner circle at 100% 0%, #00dfff 0%, #8c00ea 100%);
 
   .card {
     width: 560px;
