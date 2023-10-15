@@ -2,8 +2,8 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import Experience from "../Experience";
 
-import vertexShader from "@/three/shaders/Loader/vertex.glsl";
-import fragmentShader from "@/three/shaders/Loader/fragment.glsl";
+import vertexShader from "@/three/shaders/loader/vertex.glsl";
+import fragmentShader from "@/three/shaders/loader/fragment.glsl";
 
 export default class Loader {
   constructor() {

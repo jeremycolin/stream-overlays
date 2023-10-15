@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import Experience from "../Experience";
 
-import vertexShader from "@/three/shaders/Stars/vertex.glsl";
-import fragmentShader from "@/three/shaders/Stars/fragment.glsl";
+import vertexShader from "@/three/shaders/stars/vertex.glsl";
+import fragmentShader from "@/three/shaders/stars/fragment.glsl";
 
 export default class Stars {
   constructor() {
