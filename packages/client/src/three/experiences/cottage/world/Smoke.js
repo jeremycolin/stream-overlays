@@ -13,7 +13,7 @@ export default class Smoke {
 
     // Options
     this.options = {
-      smokeColor: new THREE.Color(0x0b0a0a),
+      smokeColor: "#282424",
       x: -0.35,
       y: 3.05,
       z: -1.05,
