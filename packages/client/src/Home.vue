@@ -35,7 +35,7 @@ export default {
     top: 0;
     left: 0;
     outline: none;
-    z-index: 10;
+    pointer-events: none;
   }
 
   .title {
