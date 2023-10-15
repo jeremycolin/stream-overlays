@@ -11,9 +11,7 @@ export default class Renderer {
     this.camera = this.experience.camera;
 
     // Options
-    this.options = {
-      clearColor: "#201919",
-    };
+    this.options = {};
 
     this.setDebug();
     this.setInstance();
@@ -30,7 +28,6 @@ export default class Renderer {
     this.instance.outputEncoding = THREE.sRGBEncoding;
     this.instance.shadowMap.enabled = true;
     this.instance.shadowMap.type = THREE.PCFSoftShadowMap;
-    // this.instance.setClearColor(this.options.clearColor);
     this.instance.setSize(this.sizes.width, this.sizes.height);
     this.instance.setPixelRatio(this.sizes.pixelRatio);
   }
@@ -44,14 +41,9 @@ export default class Renderer {
     // Debug
     if (this.debug.active) {
       this.debugFolder = this.debug.ui.addFolder("World");
-      this.debugFolder
-        .addColor(this.options, "clearColor")
-        .name("Background Color")
-        .onChange(() => {
-          this.instance.setClearColor(this.options.clearColor);
-        });
     }
   }
+
   update() {
     this.instance.render(this.scene, this.camera.instance);
   }

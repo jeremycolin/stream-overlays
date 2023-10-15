@@ -54,7 +54,7 @@ export default class Cottage {
         child.receiveShadow = false;
       }
     });
-    // this.model.position.y = -1;
+    this.model.position.y = -1;
     this.scene.add(this.model);
   }
 
