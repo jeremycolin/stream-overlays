@@ -67,6 +67,8 @@ export default {
   }
 
   footer {
+    position: relative;
+    z-index: 20;
     width: 100%;
     margin-top: auto;
     padding: 1.5rem;
