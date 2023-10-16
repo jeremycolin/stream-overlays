@@ -23,7 +23,7 @@ let intervalSpriteVariant;
 export default {
   name: "startScene",
   async mounted() {
-    console.log("Scene -> Default Start");
+    console.log("Scene -> lbineau Start");
     app = new PIXI.Application({
       width: 1920,
       height: 1080,

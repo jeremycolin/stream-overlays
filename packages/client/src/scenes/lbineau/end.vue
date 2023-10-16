@@ -2,7 +2,7 @@
 export default {
   name: "endScene",
   mounted() {
-    console.log("Scene -> Default End");
+    console.log("Scene -> lbineau End");
   },
 };
 </script>

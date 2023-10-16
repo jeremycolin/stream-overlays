@@ -2,7 +2,7 @@
 export default {
   name: "liveScene",
   mounted() {
-    console.log("Scene -> Default Live");
+    console.log("Scene -> lbineau Live");
   },
 };
 </script>
