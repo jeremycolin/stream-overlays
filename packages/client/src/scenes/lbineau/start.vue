@@ -1,6 +1,7 @@
 <script>
 import * as PIXI from "pixi.js";
-import { CRTFilter, RGBSplitFilter, GlitchFilter, DropShadowFilter, ColorOverlayFilter, OutlineFilter } from "pixi-filters";
+import { CRTFilter, RGBSplitFilter, GlitchFilter, ColorOverlayFilter, OutlineFilter } from "pixi-filters";
+import _random from 'lodash/random';
 import backgroundUrl from "@/assets/isaac/isaac.jpg";
 import FontFaceObserver from 'fontfaceobserver';
 
@@ -20,8 +21,19 @@ let filterOuline;
 let text;
 let intervalSprite;
 let intervalSpriteVariant;
+const spriteIdxMin = 1;
+const spriteIdxMax = 56;
 export default {
   name: "startScene",
+  methods: {
+    preloadImages (app) {
+      for (let spriteIdx = spriteIdxMin; spriteIdx < spriteIdxMax; spriteIdx++) {
+        app.loader.add(`/isaac/loading/loadimages-${spriteIdx.toString().padStart(3, '0')}.png`);
+        app.loader.add(`/isaac/loading/loadimages-${spriteIdx.toString().padStart(3, '0')}_2.png`);
+      }
+      app.loader.load();
+    }
+  },
   async mounted() {
     console.log("Scene -> lbineau Start");
     app = new PIXI.Application({
@@ -34,6 +46,9 @@ export default {
     stage = new PIXI.Container();
     app.stage.addChild(stage);
     renderer = PIXI.autoDetectRenderer();
+
+    // preload loading images
+    this.preloadImages(app);
 
     // Create a new texture
     texture = PIXI.Texture.from(backgroundUrl);
@@ -115,14 +130,12 @@ export default {
     });
 
     // handle sprite changes
-    let spriteIdx = 1;
+    const spriteIdxMin = 1;
     const spriteIdxMax = 56;
+    let spriteIdx = spriteIdxMin;
     let spriteVariantIdx = 0;
     intervalSprite = setInterval(() => {
-      if (spriteIdx < spriteIdxMax) {
-        spriteIdx++
-      }
-      spriteIdx = (spriteIdx < spriteIdxMax) ? spriteIdx + 1 : 1;
+      spriteIdx = _random(spriteIdxMin, spriteIdxMax);
     }, 4000);
 
     intervalSpriteVariant = setInterval(() => {
