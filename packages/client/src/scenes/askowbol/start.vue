@@ -1,175 +1,69 @@
 <script>
-import * as PIXI from "pixi.js";
-import backgroundUrl from "@/assets/background-askowbol.jpg";
-import { MotionBlurFilter, DropShadowFilter } from "pixi-filters";
-import { gsap } from "gsap";
-import { PixiPlugin } from "gsap/PixiPlugin.js";
-
-import { addToPixiLoader } from "@/lib/utils";
-
-gsap.registerPlugin(PixiPlugin);
-
-// Pixi variables
-let app;
-let stage;
-let filterNoise;
-let filterMotionBlur;
-let filterDropshadow;
-let texture;
-let background;
-let textOne;
-let textTwo;
-let textThree;
-let graphics;
-let tl;
-
+import Experience from "@/three/experiences/cottage/Experience.js";
+let experience;
 export default {
   name: "startScene",
-  async mounted() {
+  mounted() {
     console.log("Scene -> Askowbol Start");
-
-    app = new PIXI.Application({
-      width: 1920,
-      height: 1080,
-      backgroundAlpha: 0,
-    });
-
-    this.$el.appendChild(app.view);
-    stage = new PIXI.Container();
-    app.stage.addChild(stage);
-
-    // FILTERS
-    filterNoise = new PIXI.filters.NoiseFilter();
-    filterNoise.noise = 0.1;
-    filterNoise.seed = 0.01;
-
-    filterMotionBlur = new MotionBlurFilter();
-    filterMotionBlur.kernelSize = 15;
-
-    filterDropshadow = new DropShadowFilter();
-
-    // BACKGROUND IMAGE
-    texture = PIXI.Texture.from(backgroundUrl);
-    background = new PIXI.Sprite(texture);
-
-    background.anchor.set(0.5);
-    background.x = 1920 / 2;
-    background.y = 1080 / 2;
-
-    background.filters = [filterNoise];
-
-    stage.addChild(background);
-
-    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco");
-
-    // TEXT
-    textOne = new PIXI.Text("ÇA", {
-      fontFamily: "Sue Ellen Francisco",
-      fontSize: 90,
-      padding: 50,
-      fill: 0xffffff,
-    });
-
-    textOne.anchor.set(0.5);
-    textOne.x = 600;
-    textOne.y = 0;
-
-    textOne.filters = [filterMotionBlur, filterDropshadow];
-    stage.addChild(textOne);
-
-    textTwo = new PIXI.Text("COMMENCE", {
-      fontFamily: "Sue Ellen Francisco",
-      fontSize: 200,
-      padding: 50,
-      fill: 0xffffff,
-    });
-
-    textTwo.anchor.set(0.5);
-    textTwo.x = 1920 / 2;
-    textTwo.y = 0;
-
-    textTwo.filters = [filterMotionBlur, filterDropshadow];
-    stage.addChild(textTwo);
-
-    textThree = new PIXI.Text("BIENTÔT", {
-      fontFamily: "Sue Ellen Francisco",
-      fontSize: 90,
-      padding: 50,
-      fill: 0xffffff,
-    });
-
-    textThree.anchor.set(0.5);
-    textThree.x = 1300;
-    textThree.y = 0;
-
-    textThree.filters = [filterMotionBlur, filterDropshadow];
-    stage.addChild(textThree);
-
-    // TOP AND BOTTOM BAR
-    graphics = new PIXI.Graphics();
-
-    graphics.beginFill(0x000000);
-    graphics.drawRect(0, 0, 1920, 100);
-    graphics.endFill();
-
-    graphics.beginFill(0x000000);
-    graphics.drawRect(0, 980, 1920, 100);
-    graphics.endFill();
-
-    graphics.filters = [filterMotionBlur];
-    app.stage.addChild(graphics);
-
-    // TICKER FOR FILTER ANIMATION
-    gsap.ticker.add(() => {
-      filterNoise.noise = Math.random() / 5;
-      filterNoise.seed = Math.random() / 10;
-      filterMotionBlur.velocity.x = Math.random() * 10;
-      filterMotionBlur.velocity.y = Math.random() * 20;
-      app.ticker.update();
-    });
-
-    tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-
-    tl.to(textOne, { y: 370, duration: 0.5, ease: "power3.inOut" });
-    tl.to(textTwo, { y: 1080 / 2, duration: 0.5, ease: "power3.inOut" });
-    tl.to(textThree, { y: 670, duration: 0.5, ease: "power3.inOut" });
-    tl.to(textOne, { y: 1080, duration: 0.5, ease: "power3.inOut" }, "+=10");
-    tl.to(textTwo, { y: 1200, duration: 0.5, ease: "power3.inOut" }, "-=0.5");
-    tl.to(textThree, { y: 1080, duration: 0.5, ease: "power3.inOut" }, "-=0.5");
+    experience = new Experience(this.$refs.canvas);
   },
   unmounted() {
-    app.destroy(true, { children: true });
-    stage = null;
-    filterNoise = null;
-    filterMotionBlur = null;
-    filterDropshadow = null;
-    texture = null;
-    background = null;
-    textOne = null;
-    textTwo = null;
-    textThree = null;
-    graphics = null;
-    tl = null;
+    // TODO Destroy Experience
+    experience.destroy();
   },
 };
 </script>
 
 <template>
-  <div class="start-scene"></div>
+  <div class="start-scene">
+    <span class="text text-front js-text">Ça commence bientôt!</span>
+    <span class="text text-back js-text">Ça commence bientôt!</span>
+    <canvas ref="canvas" class="webgl"></canvas>
+  </div>
 </template>
 
 <style lang="scss">
 .start-scene {
   width: 100%;
   height: 100%;
+  background: #201919;
 
-  canvas {
-    position: absolute;
-    z-index: 0;
+  .webgl {
+    position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    outline: none;
+    z-index: 10;
+  }
+
+  .text {
+    position: absolute;
+    top: 50%;
+    left: 2vw;
+    right: 2vw;
+    transform: translateY(-50%);
+    color: #dcd6a6;
+    font-family: "cartograph_cfbold_italic";
+    pointer-events: none;
+    font-size: 13vw;
+    line-height: 1.2;
+    font-weight: 300;
+    text-align: center;
+    letter-spacing: 0.55vw;
+  }
+
+  .text-front {
+    z-index: 20;
+    -moz-text-stroke-color: #dcd6a6;
+    -webkit-text-stroke-color: #dcd6a6;
+    -moz-text-stroke-width: 0.085vw;
+    -webkit-text-stroke-width: 0.085vw;
+    -moz-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-back {
+    z-index: 1;
   }
 }
 </style>

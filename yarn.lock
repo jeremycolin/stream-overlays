@@ -1820,7 +1820,7 @@ supports-preserve-symlinks-flag@^1.0.0:
 
 three@^0.157.0:
   version "0.157.0"
-  resolved "https://registry.npmjs.org/three/-/three-0.157.0.tgz"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.157.0.tgz#5baac531941fc8c4ca62d45ee4265652e03318d0"
   integrity sha512-CeAwQrf4x3z0/e+MC4F+nXLW5t0gh3pw+L6CCBqpHvOq3bGYIgRYub7Pv0j/9wR+d++OiEglyZzWyuSYbwWGOA==
 
 to-regex-range@^5.0.1:

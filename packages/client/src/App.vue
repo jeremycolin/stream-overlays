@@ -4,6 +4,15 @@
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Runic&family=Skranji&display=swap");
+
+@font-face {
+  font-family: "cartograph_cfbold_italic";
+  src: url("/fonts/cartographcf-bolditalic-webfont.woff2") format("woff2"),
+    url("/fonts/cartographcf-bolditalic-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 html,
 body,
 #app {
