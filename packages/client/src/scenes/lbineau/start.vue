@@ -130,8 +130,6 @@ export default {
     });
 
     // handle sprite changes
-    const spriteIdxMin = 1;
-    const spriteIdxMax = 56;
     let spriteIdx = spriteIdxMin;
     let spriteVariantIdx = 0;
     intervalSprite = setInterval(() => {
