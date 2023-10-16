@@ -171,13 +171,13 @@ export default {
 };
 </script>
 <template>
-  <div class="waiting-screen"></div>
+  <div class="end-screen"></div>
 </template>
 
 <style lang="scss">
 @import "./fonts.scss";
 
-.waiting-screen {
+.end-screen {
   display: flex;
   position: relative;
   width: 1920px;
