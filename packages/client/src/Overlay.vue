@@ -18,7 +18,6 @@ export default {
     const { user } = this.$route.params;
 
     return {
-      isDev: IS_DEV,
       game: "",
       followEvent: {},
       state: "loading",
@@ -74,40 +73,45 @@ export default {
 </script>
 
 <template>
-  <div v-if="state === 'loading'" class="auth generic-background">
-    <app-title></app-title>
-    <div class="card">
-      <div class="text-info">Loading..</div>
-    </div>
-  </div>
-  <div v-else-if="state === 'oauth:start'" class="auth generic-background">
-    <app-title></app-title>
-    <div class="card">
-      <div class="text-info">
-        <h3>Hey {{ user }}! 👋</h3>
-        <p class="details">Looks like we need to renew your Twitch permissions</p>
+  <div class="stream-overlay" :class="{ 'generic-background': state === 'oauth:start' }">
+    <Transition name="slide-fade">
+      <div v-if="state === 'loading'" class="card">
+        <div class="text-info">Loading...</div>
       </div>
-      <button @click="handleAuth" class="auth-button">{{ "Allow" }}</button>
-    </div>
-  </div>
-  <div v-else class="stream-overlay" :class="{ 'is-dev': isDev }">
-    <SceneManager />
-    <FollowManager :game="game" />
+    </Transition>
+    <Transition name="slide-fade">
+      <div v-if="state === 'oauth:start'" class="card">
+        <div class="text-info">
+          <h3>Hey {{ user }}! 👋</h3>
+          <p class="details">Looks like we need to renew your Twitch permissions.</p>
+        </div>
+        <button @click="handleAuth" class="auth-button">{{ "Allow" }}</button>
+      </div>
+    </Transition>
+    <template v-if="state === 'oauth:success'">
+      <SceneManager />
+      <FollowManager :game="game" />
+    </template>
   </div>
 </template>
 
 <style lang="scss">
-.auth {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.stream-overlay {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+
+  &.is-dev {
+    background: grey;
+  }
 
   .card {
-    width: 560px;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    min-width: 100px;
     padding: 1.5rem;
     color: #04060a;
     backdrop-filter: blur(16px) saturate(180%);
@@ -151,15 +155,14 @@ export default {
   }
 }
 
-.stream-overlay {
-  display: flex;
-  position: relative;
-  width: 1920px;
-  height: 1080px;
-  overflow: hidden;
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 600ms ease-in-out;
+}
 
-  &.is-dev {
-    background: grey;
-  }
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
 }
 </style>
