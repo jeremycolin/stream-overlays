@@ -87,7 +87,7 @@ export default {
 
     gsap.set(this.$refs.notification, { autoAlpha: 0 });
 
-    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Source+Code+Pro");
+    await addToPixiLoader(app, "Source Code Pro", "https://fonts.googleapis.com/css2?family=Source+Code+Pro");
 
     ticker.add(() => {
       if (animate) {

@@ -1,5 +1,5 @@
-export function addToPixiLoader(app, url) {
-  app.loader.add({ name: "Font From Google", url: url });
+export function addToPixiLoader(app, name, url) {
+  app.loader.add({ name: name, url: url });
 
   return new Promise((resolve) => {
     app.loader.load(() => resolve());

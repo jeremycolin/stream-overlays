@@ -196,7 +196,7 @@ export default {
     this.$refs.canvas.appendChild(app.view);
     app.stage.addChild(stage);
 
-    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Sawarabi+Mincho");
+    await addToPixiLoader(app, "Sawarabi Mincho", "https://fonts.googleapis.com/css2?family=Sawarabi+Mincho");
 
     graphics = new PIXI.Graphics();
 

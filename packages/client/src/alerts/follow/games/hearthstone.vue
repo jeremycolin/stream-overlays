@@ -1,18 +1,20 @@
 <script>
 import * as PIXI from "pixi.js";
 import { gsap } from "gsap";
-import { PixiPlugin } from "gsap/PixiPlugin.js";
 
+import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 import followSound from "@/assets/sounds/follow.wav";
+import { addToPixiLoader } from "@/lib/utils";
+
+PIXI.Loader.registerPlugin(WebfontLoaderPlugin);
 
 import backgroundImage from "@/assets/hs/background.png";
 import mathCatImage from "@/assets/hs/mathcat.png";
 import careBearImage from "@/assets/hs/carebear.png";
+import oraclemouseImage from "@/assets/hs/oraclemouse.png";
 import tavernOneImage from "@/assets/hs/tavern/t1.png";
 import tavernTwoImage from "@/assets/hs/tavern/t2.png";
 import tavernThreeImage from "@/assets/hs/tavern/t3.png";
-
-gsap.registerPlugin(PixiPlugin);
 
 // Pixi variables
 let size = {
@@ -22,12 +24,17 @@ let size = {
 let app = null;
 let stage = null;
 let userText = null;
+let titleText = null;
+let paragraphText = null;
+let attackText = null;
+let healthText = null;
 let texture = null;
 let background = null;
-let artworks = [mathCatImage, careBearImage];
+let artworks = [mathCatImage, careBearImage, oraclemouseImage];
 let artwork = null;
 let taverns = [tavernOneImage, tavernTwoImage, tavernThreeImage];
 let tavern = null;
+let numberFontStyle = null;
 
 let audio = null;
 let tl;
@@ -78,7 +85,7 @@ export default {
       index = 0;
     },
   },
-  mounted() {
+  async mounted() {
     tl = gsap.timeline({
       onComplete: this.onQueueComplete,
     });
@@ -134,10 +141,12 @@ export default {
 
     stage.addChild(tavern);
 
+    await addToPixiLoader(app, "Belwe", "/fonts/Belwe.ttf");
     userText = new PIXI.Text("testFromUser", {
+      fontFamily: "Belwe",
       fill: "#ffffff",
       fontSize: 30,
-      strokeThickness: 3,
+      strokeThickness: 6,
     });
 
     userText.anchor.set(0.5);
@@ -145,6 +154,55 @@ export default {
     userText.y = size.height / 2 + 20;
 
     stage.addChild(userText);
+
+    await addToPixiLoader(app, "FranklinMedium", "/fonts/FranklinMedium.otf");
+    titleText = new PIXI.Text("Râle d'agonie:", {
+      fontFamily: "FranklinMedium",
+      fill: "#1c1209",
+      fontSize: 24,
+    });
+
+    titleText.anchor.set(0.5);
+    titleText.x = size.width / 2;
+    titleText.y = size.height / 2 + 130;
+
+    stage.addChild(titleText);
+
+    await addToPixiLoader(app, "FranklinRegular", "/fonts/FranklinRegular.ttf");
+    paragraphText = new PIXI.Text("meurt", {
+      fontFamily: "FranklinRegular",
+      fill: "#1c1209",
+      fontSize: 24,
+    });
+
+    paragraphText.anchor.set(0.5);
+    paragraphText.x = size.width / 2;
+    paragraphText.y = size.height / 2 + 160;
+
+    stage.addChild(paragraphText);
+
+    numberFontStyle = new PIXI.TextStyle({
+      fontFamily: "Belwe",
+      fill: "#ffffff",
+      fontSize: 82,
+      strokeThickness: 6,
+    });
+
+    attackText = new PIXI.Text(Math.floor(Math.random() * 10), numberFontStyle);
+
+    attackText.anchor.set(0.5);
+    attackText.x = 65;
+    attackText.y = size.height - 60;
+
+    stage.addChild(attackText);
+
+    healthText = new PIXI.Text(Math.floor(Math.random() * 10), numberFontStyle);
+
+    healthText.anchor.set(0.5);
+    healthText.x = size.width - 48;
+    healthText.y = size.height - 60;
+
+    stage.addChild(healthText);
 
     this.$refs.canvas.appendChild(app.view);
     app.stage.addChild(stage);
@@ -154,10 +212,15 @@ export default {
     app.destroy(true, { children: true });
     stage = null;
     userText = null;
+    titleText = null;
+    paragraphText = null;
+    attackText = null;
+    healthText = null;
     texture = null;
     background = null;
     artwork = null;
     tavern = null;
+    numberFontStyle = null;
 
     audio = null;
 
