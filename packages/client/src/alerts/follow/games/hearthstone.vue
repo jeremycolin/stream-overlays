@@ -142,6 +142,8 @@ export default {
     stage.addChild(tavern);
 
     await addToPixiLoader(app, "Belwe", "/fonts/Belwe.ttf");
+    /* TODO remove */
+    /*
     userText = new PIXI.Text("testFromUser", {
       fontFamily: "Belwe",
       fill: "#ffffff",
@@ -152,8 +154,11 @@ export default {
     userText.anchor.set(0.5);
     userText.x = size.width / 2;
     userText.y = size.height / 2 + 20;
+    // stage.addChild(userText);
+    */
+    /* TODO EoF remove */
 
-    stage.addChild(userText);
+    this.$refs.username.innerHTML = "testFromUser";
 
     await addToPixiLoader(app, "FranklinMedium", "/fonts/FranklinMedium.otf");
     titleText = new PIXI.Text("Râle d'agonie:", {
@@ -236,6 +241,31 @@ export default {
     <div class="follow-hearthstone__notification" ref="notification">
       <div class="follow-hearthstone__container">
         <div class="follow-hearthstone__canvas" ref="canvas"></div>
+        <svg class="svg" viewBox="0 0 282 60">
+          <!-- 1. curve: define the bezier curve the Text will follow -->
+          <path id="svgCurve" fill="none" stroke="none" d="m0,22.12s12.48,7.37,67-5C111.1,7.11,174.62-1.11,213,.12c43.98,1.42,52,7,68,14" transform="translate(0 20)" />
+          <!--
+            2. text: define and display the Text
+            - textPath will make it follow the curve
+          -->
+          <text id="svgText" x="0" y="0">
+            <!-- 2.1. textPath: follow the curve -->
+            <textPath xlink:href="#svgCurve" ref="username"></textPath>
+          </text>
+          <!--
+            3. Stroke: it is not possible to add "outer" stroke so we need to add a trick to achieve it
+            - apply stroke width with the double of expected amount (6 instead of 3)
+            - a mask with the size of the SVG (white to hide) that will only show the Text without the stroke (black to reveal)
+          -->
+          <use
+            xlink:href="#svgText"
+            stroke-width="6" stroke="black" fill="none"
+            mask="url(#svgTextStrokeOnly)"/>
+          <mask id="svgTextStrokeOnly">
+            <rect x="0" y="0" width="282" height="60" fill="white"/>
+            <use xlink:href="#svgText" fill="black"/>
+          </mask>
+        </svg>
       </div>
     </div>
   </div>
@@ -267,6 +297,18 @@ export default {
     top: 0;
     left: 0;
     z-index: 10;
+  }
+  svg {
+    // background-color: tomato;
+    position: absolute;
+    z-index: 11;
+    top: 295px;
+    left: 60px;
+    width: 282px;
+    height: 60px;
+    font-family: 'Belwe';
+    fill: #ffffff;
+    font-size: 30px;
   }
 }
 </style>
