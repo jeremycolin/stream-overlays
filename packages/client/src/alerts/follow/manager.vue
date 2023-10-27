@@ -14,7 +14,7 @@ export default defineComponent({
             const component = await import(`./games/${this.$props.game}.vue`);
             resolve(component);
           } catch (err) {
-            const component = import("./games/filou.vue");
+            const component = import("./games/hearthstone.vue");
             resolve(component);
           }
         });
