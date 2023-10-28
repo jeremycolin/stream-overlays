@@ -16,18 +16,12 @@ let app = null;
 let stage = null;
 let graphics = null;
 let followText = null;
-let followImage = null;
 let filterDropshadow = null;
 
 let audio = null;
 let tl;
 let index;
 let events;
-
-function animateFollowImage(delta) {
-  followImage.height += 0.1 * delta;
-  followImage.width += 0.1 * delta;
-}
 
 export default {
   name: "alert-follow-Filou",
@@ -59,18 +53,6 @@ export default {
       const event = events[index];
       followText.text = ` BIENVENUE ${this.followEvent.user_name.toUpperCase()}! `;
 
-      followImage = PIXI.Sprite.from(this.followEvent.profile_image_url);
-
-      followImage.anchor.set(0.5);
-      followImage.x = 500 / 2;
-      followImage.y = 220 / 2 + 60;
-      followImage.height = 55;
-      followImage.width = 55;
-      followImage.mask = graphics;
-      app.ticker.add(animateFollowImage);
-
-      stage.addChild(followImage);
-
       audio.play();
       this.$refs.video.play();
       // Animate mask to reveal the text
@@ -87,7 +69,6 @@ export default {
       this.$refs.video.pause();
       // reset mask animation values
       gsap.set(graphics, { width: 1 });
-      app.ticker.remove(animateFollowImage);
     },
     onQueueComplete() {
       tl.clear();
@@ -159,7 +140,6 @@ export default {
     stage = null;
     graphics = null;
     followText = null;
-    followImage = null;
     filterDropshadow = null;
 
     audio = null;
