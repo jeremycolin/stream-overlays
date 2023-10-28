@@ -99,7 +99,7 @@ export default {
     this.$refs.video.pause();
     gsap.set(this.$refs.notification, { y: -525 });
 
-    await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco");
+    await addToPixiLoader(app, "Sue Ellen Francisco", "https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco");
 
     followText = new PIXI.Text("Bienvenue Jean Michel!", {
       fontFamily: "Sue Ellen Francisco",
