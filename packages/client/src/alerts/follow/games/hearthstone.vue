@@ -30,9 +30,10 @@ let attackText = null;
 let healthText = null;
 let texture = null;
 let background = null;
-let artworks = [mathCatImage, careBearImage, oraclemouseImage];
+const artworks = [PIXI.Texture.from(mathCatImage), PIXI.Texture.from(careBearImage), PIXI.Texture.from(oraclemouseImage)];
 let artwork = null;
-let taverns = [tavernOneImage, tavernTwoImage, tavernThreeImage];
+const taverns = [PIXI.Texture.from(tavernOneImage), PIXI.Texture.from(tavernTwoImage), PIXI.Texture.from(tavernThreeImage)];
+const fakeUsers = ["Squeezie", "Zerator", "Pokimane", "Domingo", "Unusualspoon", "PewDiePie", "Théotar", "Amouranth"];
 let tavern = null;
 let numberFontStyle = null;
 
@@ -44,26 +45,28 @@ let events;
 export default {
   name: "alert-follow-hearthstone",
   inject: ["followEvent"],
-  data () {
+  data() {
     return {
-      username: '',
+      isDev: IS_DEV,
+      username: "",
       // we assume 17 characters are able to fit, this part could be reworked with the computation of real length
       // because the number of characters that can actually fit depends on characters withs
-      usernameMaxLength: 17
-    }
+      usernameMaxLength: 17,
+    };
   },
   computed: {
     // limit number of characters for the username
-    clampedUsername () {
+    clampedUsername() {
       return this.username.substring(this.username, this.usernameMaxLength);
     },
     // offset the username so it appears centered
-    startOffset () {
-      return `${(1 - this.clampedUsername.length / this.usernameMaxLength) * 50}%`
-    }
+    startOffset() {
+      return `${(1 - this.clampedUsername.length / this.usernameMaxLength) * 50}%`;
+    },
   },
   watch: {
     followEvent(newVal) {
+      console.log(newVal);
       if (newVal) {
         events.push(newVal);
         let anim = this.getAnimation();
@@ -75,20 +78,20 @@ export default {
   methods: {
     getAnimation() {
       return gsap.to(this.$refs.notification, {
-        duration: 1.5,
-        y: 25, // appearing from the top
+        duration: 0.3,
+        x: -size.width / 2 + size.width / 4 + 30, // appearing from the left
         repeat: 1, // we repeat only once
-        repeatDelay: 4, // how long it stays on the screen
+        repeatDelay: 2, // how long it stays on the screen
         yoyo: true, // yoyo = repeat the animation but reverse
-        ease: "elastic(1, 0.3)",
+        ease: "ease-out",
         onStart: this.onAnimationStart,
         onComplete: this.onAnimationComplete,
       });
     },
     onAnimationStart() {
       const event = events[index];
-      userText.text = ` ${this.followEvent.user_name.toUpperCase()}`;
-
+      this.username = this.followEvent.user_name;
+      this.randomizeCard();
       audio.play();
 
       console.log(index, " debug queue event timestamp: ", event.timestamp, event.user_name);
@@ -101,6 +104,15 @@ export default {
       tl.clear();
       events = [];
       index = 0;
+    },
+    randomizeCard() {
+      if (this.isDev) this.username = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+
+      artwork.texture = artworks[Math.floor(Math.random() * artworks.length)];
+      tavern.texture = taverns[Math.floor(Math.random() * taverns.length)];
+
+      attackText.text = Math.floor(Math.random() * 10);
+      healthText.text = Math.floor(Math.random() * 10);
     },
   },
   async mounted() {
@@ -123,11 +135,10 @@ export default {
     audio = new Audio(followSound);
     audio.volume = 0.35;
 
-    // gsap.set(this.$refs.notification, { y: -525 });
+    gsap.set(this.$refs.notification, { x: -size.width });
 
     // Create a new texture
-    texture = PIXI.Texture.from(artworks[Math.floor(Math.random() * artworks.length)]);
-    artwork = new PIXI.Sprite(texture);
+    artwork = new PIXI.Sprite(artworks[Math.floor(Math.random() * artworks.length)]);
     artwork.anchor.set(0.5);
     artwork.x = size.width / 2;
     artwork.y = size.height / 2;
@@ -150,9 +161,7 @@ export default {
 
     stage.addChild(background);
 
-    texture = PIXI.Texture.from(taverns[Math.floor(Math.random() * taverns.length)]);
-    tavern = new PIXI.Sprite(texture);
-
+    tavern = new PIXI.Sprite(taverns[Math.floor(Math.random() * taverns.length)]);
     tavern.anchor.set(0.5);
     tavern.x = size.width / 2;
     tavern.y = size.height / 2;
@@ -160,21 +169,6 @@ export default {
     stage.addChild(tavern);
 
     await addToPixiLoader(app, "Belwe", "/fonts/Belwe.ttf");
-    /* TODO remove */
-    /*
-    userText = new PIXI.Text("testFromUser", {
-      fontFamily: "Belwe",
-      fill: "#ffffff",
-      fontSize: 30,
-      strokeThickness: 6,
-    });
-
-    userText.anchor.set(0.5);
-    userText.x = size.width / 2;
-    userText.y = size.height / 2 + 20;
-    // stage.addChild(userText);
-    */
-    /* TODO EoF remove */
 
     this.username = "testFromUser";
 
@@ -270,7 +264,13 @@ export default {
             </linearGradient>
           </defs>
           <!-- 1. curve: define the bezier curve the Text will follow -->
-          <path id="svgCurve" fill="none" stroke="none" d="m0,22.12s12.48,7.37,67-5C111.1,7.11,174.62-1.11,213,.12c43.98,1.42,52,7,68,14" transform="translate(10 25)" />
+          <path
+            id="svgCurve"
+            fill="none"
+            stroke="none"
+            d="m0,22.12s12.48,7.37,67-5C111.1,7.11,174.62-1.11,213,.12c43.98,1.42,52,7,68,14"
+            transform="translate(10 25)"
+          />
           <!--
             2. text: define and display the Text
             - textPath will make it follow the curve
@@ -284,13 +284,10 @@ export default {
             - apply stroke width with the double of expected amount (6 instead of 3)
             - a mask with the size of the SVG (white to hide) that will only show the Text without the stroke (black to reveal)
           -->
-          <use
-            xlink:href="#svgText"
-            stroke-width="6" stroke="black" fill="none"
-            mask="url(#svgTextStrokeOnly)"/>
+          <use xlink:href="#svgText" stroke-width="6" stroke="black" fill="none" mask="url(#svgTextStrokeOnly)" />
           <mask id="svgTextStrokeOnly">
-            <rect x="0" y="0" width="300" height="60" fill="white"/>
-            <use xlink:href="#svgText" fill="black"/>
+            <rect x="0" y="0" width="300" height="60" fill="white" />
+            <use xlink:href="#svgText" fill="black" />
           </mask>
           <!-- 4. Mask: mask the text outside of the SVG with a slight fade -->
           <mask maskUnits="userSpaceOnUse" id="fade">
@@ -309,8 +306,8 @@ export default {
 
   &__notification {
     position: absolute;
-    top: 25px;
-    left: 25px;
+    bottom: 0;
+    left: 10px;
     width: 400px;
     height: 570px;
     overflow: hidden;
@@ -321,6 +318,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
+    transform: scale(65%);
   }
 
   &__canvas {
@@ -330,14 +328,13 @@ export default {
     z-index: 10;
   }
   svg {
-    // background-color: tomato;
     position: absolute;
     z-index: 11;
     top: 290px;
     left: 55px;
     width: 300px;
     height: 60px;
-    font-family: 'Belwe';
+    font-family: "Belwe";
     fill: #ffffff;
     font-size: 30px;
   }
