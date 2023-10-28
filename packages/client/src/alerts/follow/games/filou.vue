@@ -25,7 +25,7 @@ let events;
 
 export default {
   name: "alert-follow-Filou",
-  inject: ["followEvent"],
+  inject: ["followEvent", "subscribeEvent"],
   watch: {
     followEvent(newVal) {
       if (newVal) {
@@ -34,6 +34,9 @@ export default {
         tl.add(anim);
         tl.play();
       }
+    },
+    subscribeEvent(newVal) {
+      console.log("subscribeEvent: ", newVal);
     },
   },
   methods: {

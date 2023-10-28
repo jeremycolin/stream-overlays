@@ -20,6 +20,7 @@ export default {
     return {
       game: "",
       followEvent: {},
+      subscribeEvent: {},
       state: "loading",
       user,
     };
@@ -27,6 +28,7 @@ export default {
   provide() {
     return {
       followEvent: computed(() => this.followEvent),
+      subscribeEvent: computed(() => this.subscribeEvent),
     };
   },
 
@@ -51,7 +53,10 @@ export default {
       console.log("Follow event: ", event);
       this.followEvent = event;
     });
-    socket.on(EventTypes.SUBSCRIBE, (event) => console.log("Subscribe event: ", event));
+    socket.on(EventTypes.SUBSCRIBE, (event) => {
+      console.log("Subscribe event: ", event);
+      this.subscribeEvent = event;
+    });
     socket.on(EventTypes.RAID, (event) => console.log("Raid event: ", event));
   },
   methods: {
