@@ -95,17 +95,13 @@ export default {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .stream-overlay {
   display: flex;
   position: relative;
   width: 1920px;
   height: 1080px;
   overflow: hidden;
-
-  &.is-dev {
-    background: grey;
-  }
 
   .card {
     position: absolute;
