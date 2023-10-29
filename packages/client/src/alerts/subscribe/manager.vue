@@ -3,23 +3,23 @@ import { defineComponent, defineAsyncComponent } from "vue";
 import { alertsConfig, TWITCH_API_STREAM_GAME } from "../config";
 
 export default defineComponent({
-  name: "FollowManager",
+  name: "SubscribeManager",
   props: {
     game: String,
     user: String,
   },
   methods: {
-    follow() {
+    subscribe() {
       return defineAsyncComponent(() => {
         return new Promise(async (resolve) => {
           try {
-            const userFollowAlert = alertsConfig[this.$props.user]?.follow || alertsConfig.default.follow;
+            const userSubscribeAlert = alertsConfig[this.$props.user]?.subscribe || alertsConfig.default.subscribe;
 
-            if (userFollowAlert === TWITCH_API_STREAM_GAME) {
+            if (userSubscribeAlert === TWITCH_API_STREAM_GAME) {
               const component = await import(`./games/${this.$props.game}.vue`);
               resolve(component);
             } else {
-              const component = await import(`./games/${userFollowAlert}.vue`);
+              const component = await import(`./games/${userSubscribeAlert}.vue`);
               resolve(component);
             }
           } catch (err) {
@@ -34,11 +34,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="follow-overlay"><component :is="follow()" event="follow" /></div>
+  <div class="subscribe-overlay"><component :is="subscribe()" event="subscribe" /></div>
 </template>
 
 <style lang="scss">
-.follow-overlay {
+.subscribe-overlay {
   position: absolute;
   z-index: 1;
   width: 100%;
