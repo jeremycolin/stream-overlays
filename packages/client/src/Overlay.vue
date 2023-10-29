@@ -90,7 +90,7 @@ export default {
     </Transition>
     <template v-if="state === 'oauth:success'">
       <SceneManager />
-      <FollowManager :game="game" />
+      <FollowManager :game="game" :user="user" />
     </template>
   </div>
 </template>
