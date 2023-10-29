@@ -4,7 +4,10 @@ import Experience from "@/three/experiences/home/Experience.js";
 export default {
   name: "app-home",
   mounted() {
-    const experience = new Experience(this.$refs.canvas);
+    const experience = new Experience({
+      canvas: this.$refs.canvas,
+      resize: true,
+    });
   },
 };
 </script>

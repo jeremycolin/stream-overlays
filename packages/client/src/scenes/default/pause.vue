@@ -5,7 +5,10 @@ export default {
   name: "pauseScene",
   mounted() {
     console.log("Scene -> Default Pause");
-    experience = new Experience(this.$refs.canvas);
+    experience = new Experience({
+      canvas: this.$refs.canvas,
+      resize: false,
+    });
   },
   unmounted() {
     experience.destroy();

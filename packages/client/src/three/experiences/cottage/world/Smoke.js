@@ -15,7 +15,7 @@ export default class Smoke {
     this.options = {
       smokeColor: "#282424",
       x: -0.35,
-      y: 3.05,
+      y: 2.05,
       z: -1.05,
       frequency: 350,
       threshold: 0.011,
@@ -32,7 +32,6 @@ export default class Smoke {
     this.setMaterial();
 
     // Start Animation
-
     this.playAudio();
   }
 
@@ -54,9 +53,7 @@ export default class Smoke {
 
   playAudio() {
     this.sound.play();
-    setTimeout(() => {
-      this.controls.autoRotate = true;
-    }, 4000);
+    this.controls.autoRotate = true;
   }
 
   pauseAudio() {

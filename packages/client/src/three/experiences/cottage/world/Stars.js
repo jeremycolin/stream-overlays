@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { gsap } from "gsap";
 import Experience from "../Experience";
 
 import vertexShader from "@/three/shaders/stars/vertex.glsl";
@@ -19,6 +20,7 @@ export default class Stars {
     this.setGeometry();
     this.setMaterial();
     this.setPoints();
+    this.show();
   }
 
   setGeometry() {
@@ -46,6 +48,7 @@ export default class Stars {
       depthWrite: false,
       uniforms: {
         uTime: { value: 0 },
+        uAlpha: { value: 0 },
         uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
         uSize: { value: 100 },
       },
@@ -58,6 +61,14 @@ export default class Stars {
     this.points = new THREE.Points(this.geometry, this.material);
     this.points.position.y = -5;
     this.scene.add(this.points);
+  }
+
+  show() {
+    gsap.to(this.material.uniforms.uAlpha, {
+      duration: 15,
+      value: 1,
+      ease: "power4.inOut",
+    });
   }
 
   update() {
