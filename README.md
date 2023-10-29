@@ -71,32 +71,62 @@ Start client:
 cd packages/client && yarn start
 ```
 
-Examples:
+#### Simulate events with the Twitch CLI
+
+[Download and install the Twitch CLI](https://dev.twitch.tv/docs/cli/)
+
+Examples for follow:
 
 For `samyz_`: `http://localhost:5000/samyz_/live`
 
 ```shell
-./twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --version 2 --to-user 151809327
+twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --version 2 --to-user 151809327
 ```
 
 For `askowbol`: `http://localhost:5000/askowbol/live`
 
 ```shell
-./twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --version 2 --to-user 44105925
+twitch event trigger follow -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --version 2 --to-user 44105925
+```
+
+Examples for subscribe:
+
+```shell
+twitch event trigger subscribe -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --to-user 151809327
+```
+
+For `askowbol`: `http://localhost:5000/askowbol/live`
+
+```shell
+twitch event trigger subscribe -F http://localhost:3000/eventsub -s YOUR_DARKEST_SECRET --to-user 44105925
 ```
 
 ### Test on live
 
+Examples for follow:
+
 For `samyz_`: `https://stream-overlays-production.up.railway.app/samyz_/live`
 
 ```shell
-./twitch event trigger follow -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --version 2 --to-user 151809327
+twitch event trigger follow -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --version 2 --to-user 151809327
 ```
 
 For `askowbol`: `https://stream-overlays-production.up.railway.app/askowbol/live`
 
 ```shell
-./twitch event trigger follow -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --version 2 --to-user 44105925
+twitch event trigger follow -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --version 2 --to-user 44105925
+```
+
+Examples for subscribe:
+
+```shell
+twitch event trigger subscribe -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --to-user 151809327
+```
+
+For `askowbol`: `https://stream-overlays-production.up.railway.app/askowbol/live`
+
+```shell
+twitch event trigger subscribe -F https://stream-overlays-production.up.railway.app/eventsub -s YOUR_DARKEST_SECRET --to-user 44105925
 ```
 
 Deployed on Railway.app
