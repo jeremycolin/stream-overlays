@@ -5,10 +5,12 @@ export default {
   name: "startScene",
   mounted() {
     console.log("Scene -> Askowbol Start");
-    experience = new Experience(this.$refs.canvas);
+    experience = new Experience({
+      canvas: this.$refs.canvas,
+      resize: false,
+    });
   },
   unmounted() {
-    // TODO Destroy Experience
     experience.destroy();
   },
 };
@@ -50,6 +52,7 @@ export default {
     font-weight: 300;
     text-align: center;
     letter-spacing: 0.55vw;
+    opacity: 0;
   }
 
   .text-front {

@@ -5,7 +5,10 @@ export default {
   name: "endScene",
   mounted() {
     console.log("Scene -> Askowbol End");
-    experience = new Experience(this.$refs.canvas);
+    experience = new Experience({
+      canvas: this.$refs.canvas,
+      resize: false,
+    });
   },
   unmounted() {
     experience.destroy();

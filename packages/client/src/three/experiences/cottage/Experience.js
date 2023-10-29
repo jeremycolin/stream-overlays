@@ -16,7 +16,7 @@ import sources from "./sources.js";
 let instance = null;
 
 export default class Experience {
-  constructor(canvas) {
+  constructor(options) {
     // Singleton
     if (instance) {
       return instance;
@@ -27,12 +27,12 @@ export default class Experience {
     window.experience = this;
 
     // Options
-    this.canvas = canvas;
+    this.canvas = options.canvas;
 
     // Setup
     this.debug = new Debug();
     this.stats = new Stats();
-    this.sizes = new Sizes();
+    this.sizes = new Sizes(options.resize);
     this.time = new Time();
     this.scene = new THREE.Scene();
     this.resources = new Resources(sources);

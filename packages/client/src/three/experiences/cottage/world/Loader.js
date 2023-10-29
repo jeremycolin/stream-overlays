@@ -12,6 +12,7 @@ export default class Loader {
 
     // Options
     this.options = {};
+    this.text = document.querySelectorAll(".js-text");
 
     // Setup
     this.setGeometry();
@@ -40,6 +41,7 @@ export default class Loader {
   }
 
   hideLoader() {
+    gsap.to(this.text, { autoAlpha: 1, duration: 2, ease: "power4.inOut" });
     gsap.to(this.material.uniforms.uAlpha, {
       duration: 3,
       value: 0,
