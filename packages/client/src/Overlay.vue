@@ -5,6 +5,7 @@ import { EventTypes, OauthTypes, TWITCH_GAMES } from "api";
 import AppTitle from "@/components/title.vue";
 import SceneManager from "@/scenes/manager.vue";
 import FollowManager from "@/alerts/follow/manager.vue";
+import SubscribeManager from "@/alerts/subscribe/manager.vue";
 import { nonce } from "@/lib/auth";
 
 export default {
@@ -13,6 +14,7 @@ export default {
     AppTitle,
     SceneManager,
     FollowManager,
+    SubscribeManager,
   },
   data() {
     const { user } = this.$route.params;
@@ -96,6 +98,7 @@ export default {
     <template v-if="state === 'oauth:success'">
       <SceneManager />
       <FollowManager :game="game" :user="user" />
+      <SubscribeManager :game="game" :user="user" />
     </template>
   </div>
 </template>

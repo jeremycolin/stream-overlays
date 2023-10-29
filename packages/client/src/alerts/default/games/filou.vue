@@ -4,7 +4,7 @@ import { gsap } from "gsap";
 import { PixiPlugin } from "gsap/PixiPlugin.js";
 import { WebfontLoaderPlugin } from "pixi-webfont-loader";
 import { DropShadowFilter } from "pixi-filters";
-import followSound from "@/assets/sounds/follow.wav";
+import alertSound from "@/assets/sounds/alert.wav";
 
 import { addToPixiLoader } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ gsap.registerPlugin(PixiPlugin);
 let app = null;
 let stage = null;
 let graphics = null;
-let followText = null;
+let alertText = null;
 let filterDropshadow = null;
 
 let audio = null;
@@ -24,10 +24,16 @@ let index;
 let events;
 
 export default {
-  name: "alert-follow-Filou",
+  name: "alert-Filou",
   inject: ["followEvent", "subscribeEvent"],
+  props: {
+    event: "follow" | "subscribe",
+  },
   watch: {
     followEvent(newVal) {
+      if (this.$props.event !== "follow") {
+        return;
+      }
       if (newVal) {
         events.push(newVal);
         let anim = this.getAnimation();
@@ -36,7 +42,15 @@ export default {
       }
     },
     subscribeEvent(newVal) {
-      console.log("subscribeEvent: ", newVal);
+      if (this.$props.event !== "subscribe") {
+        return;
+      }
+      if (newVal) {
+        events.push(newVal);
+        let anim = this.getAnimation();
+        tl.add(anim);
+        tl.play();
+      }
     },
   },
   methods: {
@@ -54,7 +68,7 @@ export default {
     },
     onAnimationStart() {
       const event = events[index];
-      followText.text = ` BIENVENUE ${this.followEvent.user_name.toUpperCase()}! `;
+      alertText.text = ` BIENVENUE ${event.user_name.toUpperCase()}! `;
 
       audio.play();
       this.$refs.video.play();
@@ -96,7 +110,7 @@ export default {
     stage = new PIXI.Container();
 
     // TODO: preload sound + video
-    audio = new Audio(followSound);
+    audio = new Audio(alertSound);
     audio.volume = 0.35;
 
     this.$refs.video.pause();
@@ -104,7 +118,7 @@ export default {
 
     await addToPixiLoader(app, "https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco");
 
-    followText = new PIXI.Text("Bienvenue Jean Michel!", {
+    alertText = new PIXI.Text("Bienvenue Jean Michel!", {
       fontFamily: "Sue Ellen Francisco",
       fontSize: 38,
       fontWeight: "400",
@@ -115,14 +129,14 @@ export default {
       padding: 10,
     });
 
-    followText.anchor.set(0.5);
-    followText.x = 500 / 2;
-    followText.y = 220 / 2;
+    alertText.anchor.set(0.5);
+    alertText.x = 500 / 2;
+    alertText.y = 220 / 2;
 
     filterDropshadow = new DropShadowFilter();
-    followText.filters = [filterDropshadow];
+    alertText.filters = [filterDropshadow];
 
-    stage.addChild(followText);
+    stage.addChild(alertText);
 
     this.$refs.canvas.appendChild(app.view);
     app.stage.addChild(stage);
@@ -134,7 +148,7 @@ export default {
     graphics.drawRect(0, 0, 1, 500);
     graphics.endFill();
 
-    followText.mask = graphics;
+    alertText.mask = graphics;
 
     stage.addChild(graphics);
   },
@@ -142,7 +156,7 @@ export default {
     app.destroy(true, { children: true });
     stage = null;
     graphics = null;
-    followText = null;
+    alertText = null;
     filterDropshadow = null;
 
     audio = null;
@@ -155,10 +169,10 @@ export default {
 </script>
 
 <template>
-  <div class="follow-filou">
-    <div class="follow-filou__notification" ref="notification">
-      <div class="follow-filou__container">
-        <div class="follow-filou__canvas" ref="canvas"></div>
+  <div class="alert-filou">
+    <div class="alert-filou__notification" ref="notification">
+      <div class="alert-filou__container">
+        <div class="alert-filou__canvas" ref="canvas"></div>
         <video autoplay muted src="/src/assets/filou.mp4" ref="video"></video>
       </div>
     </div>
@@ -166,7 +180,7 @@ export default {
 </template>
 
 <style lang="scss">
-.follow-filou {
+.alert-filou {
   width: 100%;
   height: 100%;
 
